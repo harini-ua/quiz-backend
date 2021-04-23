@@ -1,0 +1,163 @@
+@extends('layouts.template')
+
+@section('head-title')
+    Liqor43 | Admin panel
+@endsection
+
+@section('menu')
+    @include('partials.menu',['active'=>6])
+@endsection
+
+@section('content')
+    <div class="page">
+        <div class="page-header">
+            <h1 class="page-title">Editing question for quiz</h1>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Quiz</li>
+                <li class="breadcrumb-item"><a href="{{route('questions.index')}}">All quiz questions</a></li>
+            </ol>
+        </div>
+        <div class="page-content">
+            <!-- Panel Form Elements -->
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Fill the form</h3>
+                </div>
+                <div class="panel-body container-fluid">
+                    <form method="POST" action="{{ route('questions.update',['question'=>$question->id]) }}"
+                          enctype="multipart/form-data">
+                        @csrf
+                        @method('PATCH')
+                        <div class="row row-lg">
+                            <div class="col-md-6 col-lg-6">
+                                <!-- Example Placeholder -->
+                                <div class="example-wrap">
+                                    <h4 class="example-title">Short description overlay (if needed) - English</h4>
+                                    <input type="text" class="form-control" id="inputPlaceholder"
+                                           placeholder="enter description here" name="description"
+                                           value="{{$question->description}}">
+                                </div>
+                                <!-- End Example Placeholder -->
+                            </div>
+                        </div>
+                        <div class="row row-lg">
+                            <div class="col-md-6 col-lg-6">
+                                <!-- Example Placeholder -->
+                                <div class="example-wrap">
+                                    <h4 class="example-title">Short description overlay (if needed) - Spanish</h4>
+                                    <input type="text" class="form-control" id="inputPlaceholder"
+                                           placeholder="enter description here" name="description_spanish"
+                                           value="{{$question->description_spanish}}">
+                                </div>
+                                <!-- End Example Placeholder -->
+                            </div>
+                        </div>
+                        <div class="row row-lg">
+                            <div class="col-md-6 col-lg-6">
+                                <!-- Example Placeholder -->
+                                <div class="example-wrap">
+                                    <h4 class="example-title">Short description overlay (if needed) - German</h4>
+                                    <input type="text" class="form-control" id="inputPlaceholder"
+                                           placeholder="enter description here" name="description_german"
+                                           value="{{$question->description_german}}">
+                                </div>
+                                <!-- End Example Placeholder -->
+                            </div>
+                        </div>
+                        <div class="row row-lg">
+                            <div class="col-md-6">
+                                <div class="example-wrap m-sm-0">
+                                    <h4 class="example-title">Category of question</h4>
+                                    <div class="form-group">
+                                        <select class="form-control" name="category">
+                                            <option value="" disabled>Please select</option>
+                                            <option value="1" {{$question->category == 1 ? ' selected':''}}>How would
+                                                you call it?
+                                            </option>
+                                            <option value="2" {{$question->category == 2 ? ' selected':''}}>What can you
+                                                see?
+                                            </option>
+                                            <option value="3" {{$question->category == 3 ? ' selected':''}}>What is this
+                                                sound?
+                                            </option>
+                                            <option value="4" {{$question->category == 4 ? ' selected':''}}>What is it
+                                                made of?
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-lg">
+                            <div class="col-md-6 col-lg-6">
+                                <!-- Example File Upload -->
+                                <div class="example-wrap">
+                                    <h4 class="example-title">Image</h4>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-file" data-plugin="inputGroupFile">
+                                            <input type="text" class="form-control" readonly="" name="image_file">
+                                            <div class="input-group-append">
+                                                <span class="btn btn-success btn-file">
+                                                  <i class="icon wb-upload" aria-hidden="true"></i>
+                                                  <input type="file" name="image_file" multiple="">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if($question->image)
+                                        <div>
+                                            Current image:
+                                            <input type="image" src="{{Storage::url($question->image)}}" alt="">
+                                        </div>
+                                    @endif
+                                </div>
+                                <!-- End Example File Upload -->
+                            </div>
+                        </div>
+                        <div class="row row-lg">
+                            <div class="col-md-6 col-lg-6">
+                                <!-- Example File Upload -->
+                                <div class="example-wrap">
+                                    <h4 class="example-title">Or audio (mp3 file)</h4>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-file" data-plugin="inputGroupFile">
+                                            <input type="text" class="form-control" readonly="" name="audio_file">
+                                            <div class="input-group-append">
+                                                <span class="btn btn-success btn-file">
+                                                  <i class="icon wb-upload" aria-hidden="true"></i>
+                                                  <input type="file" name="audio_file" multiple="">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if($question->audio)
+                                        <div>
+                                            Current audio:
+                                            <audio src="{{Storage::url($question->audio)}}">Test</audio>
+                                        </div>
+                                    @endif
+                                </div>
+                                <!-- End Example File Upload -->
+                            </div>
+                        </div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <div class="row row-lg">
+                            <div class="col-md-6 col-lg-6">
+                                <button type="submit" class="btn btn-primary btn-block">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- End Panel Form Elements -->
+        </div>
+    </div>
+@endsection
