@@ -40,15 +40,7 @@
                                         <h4 class="card-title">{{ $question->description }}</h4>
                                         <p class="card-text">
                                             <strong>Category: </strong>
-                                            @if ($question->category == 1)
-                                                How would you call it?
-                                            @elseif ($question->category == 2)
-                                                What can you see?
-                                            @elseif ($question->category == 3)
-                                                What is this sound?
-                                            @else
-                                                What is it made of?
-                                            @endif
+                                            {{ \App\Enums\CategoryQuizQuestions::getDescription($question->category) }}
                                         </p>
                                         <div class="row row-lg">
                                             <div class="col-md-6 col-lg-6">

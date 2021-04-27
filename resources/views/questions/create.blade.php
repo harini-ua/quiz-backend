@@ -66,10 +66,9 @@
                                     <div class="form-group">
                                         <select class="form-control" name="category">
                                             <option value="" disabled>Please select</option>
-                                            <option value="1">How would you call it?</option>
-                                            <option value="2">What can you see?</option>
-                                            <option value="3">What is this sound?</option>
-                                            <option value="4">What is it made of?</option>
+                                            @foreach($category as $key => $item)
+                                            <option value="{{ $key }}">{{ $item }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>

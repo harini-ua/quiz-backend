@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CategoryQuizQuestions;
 use App\Models\QuizQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Intervention\Image\Facades\Image;
 
@@ -30,7 +32,9 @@ class QuizQuestionsController extends Controller
      */
     public function create()
     {
-        return view('questions.create');
+        $category = CategoryQuizQuestions::asSelectArray();
+
+        return view('questions.create', compact('category'));
     }
 
     /**

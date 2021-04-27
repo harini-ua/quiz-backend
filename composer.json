@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.3.0",
         "aws/aws-sdk-php": "^3.129",
+        "bensampo/laravel-enum": "^3.3",
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^7.0.1",

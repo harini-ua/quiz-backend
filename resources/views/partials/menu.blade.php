@@ -21,19 +21,19 @@
     <li class="site-menu-item{{ active($active == 4) }}">
         <a href="{{ route('foods.index') }}">
             <i class="site-menu-icon fas fa-utensils wb-dashboard"></i>
-            <span class="site-menu-title">Food types</span>
+            <span class="site-menu-title">Food Types</span>
         </a>
     </li>
     <li class="site-menu-item{{ active($active == 5) }}">
         <a href="{{ route('drinks.index') }}">
             <i class="site-menu-icon fas fa-cocktail wb-dashboard"></i>
-            <span class="site-menu-title">Drink types</span>
+            <span class="site-menu-title">Drink Types</span>
         </a>
     </li>
     <li class="site-menu-item{{ active($active == 6) }}">
         <a href="{{ route('questions.index') }}">
             <i class="site-menu-icon fas fa-question-circle wb-dashboard"></i>
-            <span class="site-menu-title">Quiz questions</span>
+            <span class="site-menu-title">Quiz Questions</span>
         </a>
     </li>
     <li class="site-menu-item{{ active($active == 7) }}">

@@ -36,7 +36,7 @@ class QuizController extends Controller
             'players' => 0,
             'name' => $request['quiz_name'],
             'quiz_rounds' => $request['quiz_rounds'],
-            'code' => Str::random(4)
+            'code' => mb_strtoupper(Str::random(4))
         ]);
 
         $quiz->user()->associate($request->user());
