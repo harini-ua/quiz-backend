@@ -12,8 +12,15 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthenticationController extends Controller
 {
-    public function login(Request $request) {
-
+    /**
+     * Login
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(Request $request)
+    {
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -58,6 +65,13 @@ class AuthenticationController extends Controller
         ]);
     }
 
+    /**
+     * Register
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(Request $request)
     {
         $request->validate([
@@ -68,13 +82,13 @@ class AuthenticationController extends Controller
             'language' =>'string'
         ]);
 
-        Log::info($request->all());
+        Log::info((string) $request->all());
 
         $user = new User;
-        $user->name = $request['name'];
-        $user->email = $request['email'];
-        $user->password = bcrypt($request['password']);
-        $user->language = $request['language'];
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = bcrypt($request->get('password'));
+        $user->language = $request->get('language');
 
         $user->ip = geoip(\request()->ip())->ip;
         $user->city = geoip(\request()->ip())->city;
@@ -99,6 +113,13 @@ class AuthenticationController extends Controller
         ]);
     }
 
+    /**
+     * Logout
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
@@ -113,43 +134,57 @@ class AuthenticationController extends Controller
     /**
      * Get the authenticated User
      *
-     * @return [json] user object
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function user(Request $request)
     {
         Log::info('/auth/user');
+
         return response()->json($request->user());
     }
 
+    /**
+     * Set language
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function set_language(Request $request)
     {
         Log::info('/API/set-language');
 
         /** @var User $user */
         $user = Auth::user();
-        $user->language = $request['language'];
+        $user->language = $request->get('language');
         $user->save();
 
         return response()->json('success');
     }
 
+    /**
+     * Login facebook
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login_facebook(Request $request)
     {
         Log::alert('BEGINNING OF FB');
 
         $user_facebook = Socialite::driver('facebook')->userFromToken($request['accessToken']);
 
-        $user_db = User::where('email','=',$user_facebook->getEmail())->first();
+        $user = User::where('email', $user_facebook->getEmail())->first();
 
-        if ($user_db){
-            $user = $user_db;
-        }
-        else {
+        if (!$user) {
             $user = new User;
             $user->name = $user_facebook->getName();
             $user->email = $user_facebook->getEmail();
             $user->password = 'fb-login';
-            $user->language = $request['language'];
+            $user->language = $request->get('language');
         }
 
         $user->ip = geoip(\request()->ip())->ip;
