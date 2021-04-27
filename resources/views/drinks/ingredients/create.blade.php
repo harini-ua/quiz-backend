@@ -5,16 +5,16 @@
 @endsection
 
 @section('menu')
-    @include('partials.menu',['active'=>5])
+    @include('partials.menu', ['active' => 5])
 @endsection
 
 @section('content')
     <div class="page">
         <div class="page-header">
-            <h1 class="page-title">Adding new ingredient for {{$drink->name}}</h1>
+            <h1 class="page-title">Adding new ingredient for {{ $drink->name }}</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Drink recipes</li>
-                <li class="breadcrumb-item"><a href="{{route('drinks.show',['drink'=>$drink->id])}}">{{$drink->name}}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('drinks.show', ['drink' => $drink->id])}}">{{ $drink->name }}</a></li>
             </ol>
         </div>
         <div class="page-content">
@@ -24,14 +24,14 @@
                     <h3 class="panel-title">Fill the form</h3>
                 </div>
                 <div class="panel-body container-fluid">
-                    <form method="POST" action="{{ route('drinks.ingredients.store',['drink'=>$drink->id]) }}">
+                    <form method="POST" action="{{ route('drinks.ingredients.store', ['drink' => $drink->id]) }}">
                         @csrf
                         <div class="row row-lg">
                             <div class="col-md-6 col-lg-6">
                                 <div class="example-wrap">
                                     <h4 class="example-title">Name of ingredient</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="example: Liqor43" name="name" value="{{old('name')}}">
+                                           placeholder="example: Liqor43" name="name" value="{{ old('name') }}">
                                 </div>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Quantity and unit</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="example: 200ml" name="quantity" value="{{old('quantity')}}">
+                                           placeholder="example: 200ml" name="quantity" value="{{ old('quantity') }}">
                                 </div>
                             </div>
                         </div>

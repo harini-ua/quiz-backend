@@ -53,7 +53,7 @@ class HomeController extends Controller
 
         dd($question->pluck('id'));
 
-        return view('TEST');
+        return view('test');
     }
 
     public function quiz_hook (Request $request)

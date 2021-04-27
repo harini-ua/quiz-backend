@@ -5,7 +5,7 @@
 @endsection
 
 @section('menu')
-    @include('partials.menu',['active'=>6])
+    @include('partials.menu', ['active' => 6])
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
             <h1 class="page-title">Creating new question for quiz</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Quiz</li>
-                <li class="breadcrumb-item"><a href="{{route('questions.index')}}">All quiz questions</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('questions.index') }}">All quiz questions</a></li>
             </ol>
         </div>
         <div class="page-content">
@@ -124,7 +124,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div class="row row-lg">
                             <div class="col-md-6 col-lg-6">
                                 <button type="submit" class="btn btn-primary btn-block">Save</button>

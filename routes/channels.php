@@ -12,26 +12,33 @@
 */
 
 //Broadcast::channel('quiz.{id}', function ($id) {
-//    \Illuminate\Support\Facades\Log::debug('broadcast:channel quiz'.$id);
-//    $quiz = \App\Quiz::where('code','=',$id)->first();
+//    Log::debug('broadcast:channel quiz'.$id);
+//
+//    $quiz = Quiz::where('code', $id)->first();
 //    $quiz->players = $quiz->player + 1;
 //    $quiz->save();
 //
 //    \App\Events\TestEvent::dispatch($id, 'Ušo neko');
 //
-////    return true;
-//
+//    return true;
 //});
 
+use App\Models\Quiz;
+use App\Models\QuizPlayer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 
+Route::post('/api/broadcast/auth/guest', function (Request $request) {
+    Log::info($request->headers->get('Authorization'));
+    Log::info($request);
 
-
-Route::post('/api/broadcast/auth/guest', function (\Illuminate\Http\Request $request) {
-    \Illuminate\Support\Facades\Log::info($request->headers->get('Authorization'));
-    \Illuminate\Support\Facades\Log::info($request);
-
-    $name =  substr($request->headers->get('Authorization'),5);
-    $user = new \Illuminate\Auth\GenericUser(['id' => $request->socket_id,'name'=>$name]);
+    $name =  substr($request->headers->get('Authorization'), 5);
+    $user = new \Illuminate\Auth\GenericUser([
+        'id' => $request->socket_id,
+        'name' => $name
+    ]);
 
     request()->setUserResolver(function () use ($user) {
         return $user;
@@ -40,28 +47,37 @@ Route::post('/api/broadcast/auth/guest', function (\Illuminate\Http\Request $req
     return Broadcast::auth(request());
 });
 
-
 Broadcast::channel('quiz.{roomId}', function ($user,$roomId) {
-    \Illuminate\Support\Facades\Log::info('PRESENCE CHANNEL');
-    \Illuminate\Support\Facades\Log::info(print_r($user,true));
+    Log::info('PRESENCE CHANNEL');
+    Log::info(print_r($user,true));
 
-    $quiz = \App\Quiz::where('code','=',$roomId)->first();
-    $quiz_player = new \App\QuizPlayer;
+    $quiz = Quiz::where('code', $roomId)->first();
+
+    $quiz_player = new QuizPlayer;
     $quiz_player->name = $user->name;
     $quiz_player->socket_id = $user->id;
     $quiz_player->quiz()->associate($quiz);
     $quiz_player->save();
-    if($quiz->players==0){
+
+    $host = false;
+    if ($quiz->players === 0){
         $host = true;
-    }else{
-        $host = false;
     }
-    $quiz->players = $quiz->players + 1;
+
+    $quiz->players = $quiz->player + 1;
     $quiz->save();
 
-    return ['id' => $user->id, 'name' => $user->name, 'ovo'=>'ono', 'quiz_id' => $quiz->id, 'host' => $host, 'player_position' =>  $quiz->players, 'quiz_player_id' => $quiz_player->id];
+    return [
+        'id' => $user->id,
+        'name' => $user->name,
+        'ovo' => 'ono',
+        'quiz_id' => $quiz->id,
+        'host' => $host,
+        'player_position' => $quiz->players,
+        'quiz_player_id' => $quiz_player->id
+    ];
 });
 
 //Broadcast::channel('backoffice-activity', function () {
-////    return Auth::check();
-////});
+//    return Auth::check();
+//});

@@ -8,19 +8,19 @@
     <ul class="site-menu" data-plugin="menu">
         <li class="site-menu-category">General</li>
         <li class="site-menu-item">
-            <a href="{{route('admin-home')}}">
+            <a href="{{ route('admin-home') }}">
                 <i class="site-menu-icon fas fa-home wb-dashboard"></i>
                 <span class="site-menu-title">Home</span>
             </a>
         </li>
         <li class="site-menu-item">
-            <a href="{{route('users.index')}}">
+            <a href="{{ route('users.index') }}">
                 <i class="site-menu-icon fas fa-users wb-dashboard"></i>
                 <span class="site-menu-title">Users</span>
             </a>
         </li>
         <li class="site-menu-item active">
-            <a href="{{route('event-types.index')}}">
+            <a href="{{ route('event-types.index') }}">
                 <i class="site-menu-icon fas fa-calendar-week wb-dashboard"></i>
                 <span class="site-menu-title">Event Types</span>
             </a>

@@ -9,43 +9,43 @@
 
     <title>@yield('head-title', 'Liqor43')</title>
 
-    <link rel="apple-touch-icon" href="/assets/images/liqor.png">
-    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/liqor.png') }}">
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap-extend.min.css">
-    <link rel="stylesheet" href="/assets/css/site.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-extend.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/site.min.css') }}">
 
     <!-- Plugins -->
-    <link rel="stylesheet" href="/assets/vendor/animsition/animsition.css">
-    <link rel="stylesheet" href="/assets/vendor/asscrollable/asScrollable.css">
-    <link rel="stylesheet" href="/assets/vendor/switchery/switchery.css">
-    <link rel="stylesheet" href="/assets/vendor/intro-js/introjs.css">
-    <link rel="stylesheet" href="/assets/vendor/slidepanel/slidePanel.css">
-    <link rel="stylesheet" href="/assets/vendor/flag-icon-css/flag-icon.css">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/animsition/animsition.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/asscrollable/asScrollable.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/switchery/switchery.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/intro-js/introjs.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/slidepanel/slidePanel.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/flag-icon-css/flag-icon.css') }}">
 
-    <link rel="stylesheet" href="/assets/css/register-v2.min.css">
-    <link rel="stylesheet" href="/assets/css/login-v2.min.css">
-    <link rel="stylesheet" href="/assets/css/yellow.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/register-v2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/login-v2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/yellow.min.css') }}">
 
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="/assets/fonts/web-icons/web-icons.min.css">
-    <link rel="stylesheet" href="/assets/fonts/brand-icons/brand-icons.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/fonts/web-icons/web-icons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/fonts/brand-icons/brand-icons.min.css') }}">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
 
     <!--[if lt IE 9]>
-    <script src="/assets/vendor/html5shiv/html5shiv.min.js"></script>
+    <script src="{{ asset('assets/vendor/html5shiv/html5shiv.min.js') }}"></script>
     <![endif]-->
 
     <!--[if lt IE 10]>
-    <script src="/assets/vendor/media-match/media.match.min.js"></script>
-    <script src="/assets/vendor/respond/respond.min.js"></script>
+    <script src="{{ asset('assets/vendor/media-match/media.match.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/respond/respond.min.js') }}"></script>
     <![endif]-->
 
     <!-- Scripts -->
-    <script src="/assets/vendor/breakpoints/breakpoints.js"></script>
+    <script src="{{ asset('assets/vendor/breakpoints/breakpoints.js') }}"></script>
     <script>
         Breakpoints();
     </script>
@@ -58,46 +58,46 @@
 @yield('content')
 
 <!-- Core  -->
-<script src="/assets/vendor/babel-external-helpers/babel-external-helpers.js"></script>
-<script src="/assets/vendor/jquery/jquery.js"></script>
-<script src="/assets/vendor/popper-js/umd/popper.min.js"></script>
-<script src="/assets/vendor/bootstrap/bootstrap.js"></script>
-<script src="/assets/vendor/animsition/animsition.js"></script>
-<script src="/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
-<script src="/assets/vendor/asscrollbar/jquery-asScrollbar.js"></script>
-<script src="/assets/vendor/asscrollable/jquery-asScrollable.js"></script>
-<script src="/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+<script src="{{ asset('assets/vendor/babel-external-helpers/babel-external-helpers.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery/jquery.js') }}"></script>
+<script src="{{ asset('assets/vendor/popper-js/umd/popper.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap/bootstrap.js') }}"></script>
+<script src="{{ asset('assets/vendor/animsition/animsition.js') }}"></script>
+<script src="{{ asset('assets/vendor/mousewheel/jquery.mousewheel.js') }}"></script>
+<script src="{{ asset('assets/vendor/asscrollbar/jquery-asScrollbar.js') }}"></script>
+<script src="{{ asset('assets/vendor/asscrollable/jquery-asScrollable.js') }}"></script>
+<script src="{{ asset('assets/vendor/ashoverscroll/jquery-asHoverScroll.js') }}"></script>
 
 <!-- Plugins -->
-<script src="/assets/vendor/switchery/switchery.js"></script>
-<script src="/assets/vendor/intro-js/intro.js"></script>
-<script src="/assets/vendor/screenfull/screenfull.js"></script>
-<script src="/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
-<script src="/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
+<script src="{{ asset('assets/vendor/switchery/switchery.js') }}"></script>
+<script src="{{ asset('assets/vendor/intro-js/intro.js') }}"></script>
+<script src="{{ asset('assets/vendor/screenfull/screenfull.js') }}"></script>
+<script src="{{ asset('assets/vendor/slidepanel/jquery-slidePanel.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery-placeholder/jquery.placeholder.js') }}"></script>
 
 <!-- Scripts -->
-<script src="/assets/js/Component.js"></script>
-<script src="/assets/js/Plugin.js"></script>
-<script src="/assets/js/Base.js"></script>
-<script src="/assets/js/Config.js"></script>
+<script src="{{ asset('assets/js/Component.js') }}"></script>
+<script src="{{ asset('assets/js/Plugin.js') }}"></script>
+<script src="{{ asset('assets/js/Base.js') }}"></script>
+<script src="{{ asset('assets/js/Config.js') }}"></script>
 
-<script src="/assets/base/js/Section/Menubar.js"></script>
-<script src="/assets/base/js/Section/GridMenu.js"></script>
-<script src="/assets/base/js/Section/Sidebar.js"></script>
-<script src="/assets/base/js/Section/PageAside.js"></script>
-<script src="/assets/base/js/Plugin/menu.js"></script>
+<script src="{{ asset('assets/base/js/Section/Menubar.js') }}"></script>
+<script src="{{ asset('assets/base/js/Section/GridMenu.js') }}"></script>
+<script src="{{ asset('assets/base/js/Section/Sidebar.js') }}"></script>
+<script src="{{ asset('assets/base/js/Section/PageAside.js') }}"></script>
+<script src="{{ asset('assets/base/js/Plugin/menu.js') }}"></script>
 
-<script src="/assets/js/config/colors.js"></script>
-<script src="/assets/base/js/config/tour.js"></script>
+<script src="{{ asset('assets/js/config/colors.js') }}"></script>
+<script src="{{ asset('assets/base/js/config/tour.js') }}"></script>
 <script>Config.set('assets', '/assets');</script>
 
 <!-- Page -->
-<script src="/assets/base/js/Site.js"></script>
-<script src="/assets/js/Plugin/asscrollable.js"></script>
-<script src="/assets/js/Plugin/slidepanel.js"></script>
-<script src="/assets/js/Plugin/switchery.js"></script>
-<script src="/assets/js/Plugin/jquery-placeholder.js"></script>
-<script src="/assets/js/Plugin/animate-list.js"></script>
+<script src="{{ asset('assets/base/js/Site.js') }}"></script>
+<script src="{{ asset('assets/js/Plugin/asscrollable.js') }}"></script>
+<script src="{{ asset('assets/js/Plugin/slidepanel.js') }}"></script>
+<script src="{{ asset('assets/js/Plugin/switchery.js') }}"></script>
+<script src="{{ asset('assets/js/Plugin/jquery-placeholder.js') }}"></script>
+<script src="{{ asset('assets/js/Plugin/animate-list.js') }}"></script>
 
 <script>
     (function(document, window, $){

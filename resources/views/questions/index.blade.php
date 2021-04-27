@@ -5,7 +5,7 @@
 @endsection
 
 @section('menu')
-    @include('partials.menu',['active'=>6])
+    @include('partials.menu', ['active' => 6])
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
             </ol>
             <h1 class="page-title">All quiz questions</h1>
             <div class="page-header-actions">
-                <a href="{{route('questions.create')}}">
+                <a href="{{ route('questions.create') }}">
                     <button type="button" class="btn btn-sm btn-icon btn-inverse btn-round" data-toggle="tooltip"
                             data-original-title="Add">
                         <i class="icon wb-plus" aria-hidden="true"></i>
@@ -34,10 +34,10 @@
                             <div class="col-lg-4 col-md-6">
                                 <div class="card">
                                     <img class="card-img-top img-fluid w-full"
-                                         src="{{Storage::url('questions/'.$question->image)}}"
+                                         src="{{ \Illuminate\Support\Facades\Storage::url('questions/'.$question->image) }}"
                                          alt="Card image cap">
                                     <div class="card-block">
-                                        <h4 class="card-title">{{$question->description}}</h4>
+                                        <h4 class="card-title">{{ $question->description }}</h4>
                                         <p class="card-text">
                                             <strong>Category: </strong>
                                             @if ($question->category == 1)
@@ -55,25 +55,25 @@
                                                 <a class="btn btn-sm btn-icon btn-inverse btn-round"
                                                    data-toggle="tooltip"
                                                    data-original-title="Edit"
-                                                   href="{{ route('questions.edit', ['question'=>$question->id]) }}">
+                                                   href="{{ route('questions.edit', ['question' => $question->id]) }}">
                                                     <i class="icon wb-pencil" aria-hidden="true"></i>
                                                 </a>
                                             </div>
-                                            <a href="{{route('questions.destroy',['question'=>$question->id])}}"
-                                               onclick="event.preventDefault();document.getElementById('delete{{$question->id}}').submit();">
+                                            <a href="{{ route('questions.destroy', ['question' => $question->id]) }}"
+                                               onclick="event.preventDefault();document.getElementById('delete{{ $question->id }}').submit();">
                                                 <button type="button" class="btn btn-sm btn-icon btn-inverse btn-round"
                                                         data-toggle="tooltip"
                                                         data-original-title="Delete">
                                                     <i class="icon wb-trash" aria-hidden="true"></i>
                                                 </button>
                                             </a>
-                                            <form id="delete{{$question->id}}"
-                                                  action="{{route('questions.destroy',['question'=>$question->id])}}"
+                                            <form id="delete{{ $question->id }}"
+                                                  action="{{ route('questions.destroy', ['question' => $question->id]) }}"
                                                   method="POST"
                                                   style="display: none;">
                                                 @csrf
-                                                {{method_field('delete')}}
-                                                <input type="hidden" name="id" value="{{$question->id}}">
+                                                {{ method_field('delete') }}
+                                                <input type="hidden" name="id" value="{{ $question->id }}">
                                             </form>
                                         </div>
                                     </div>

@@ -17,7 +17,7 @@ class FailedJobsUuidSeeder extends Seeder
         DB::table('failed_jobs')->whereNull('uuid')->cursor()->each(function ($job) {
             DB::table('failed_jobs')
                 ->where('id', $job->id)
-                ->update(['uuid' => (string) Illuminate\Support\Str::uuid()]);
+                ->update(['uuid' => (string) \Illuminate\Support\Str::uuid()]);
         });
     }
 }

@@ -5,7 +5,7 @@
 @endsection
 
 @section('menu')
-    @include('partials.menu',['active'=>3])
+    @include('partials.menu', ['active' => 3])
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
             <h1 class="page-title">Creating new event type</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Event types</li>
-                <li class="breadcrumb-item"><a href="{{route('event-types.index')}}">All event types</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('event-types.index') }}">All event types</a></li>
             </ol>
         </div>
 
@@ -25,7 +25,7 @@
                     <h3 class="panel-title">Fill the form</h3>
                 </div>
                 <div class="panel-body container-fluid">
-                    <form method="POST" action="{{ route('event-types.update',['event_type'=>$event_type->id]) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('event-types.update', ['event_type' => $event_type->id]) }}" enctype="multipart/form-data">
                         @method('PATCH')
                         @csrf
 
@@ -34,7 +34,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Title for event type (English)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="example: Dinner for two" name="title" value="{{$event_type->title}}">
+                                           placeholder="example: Dinner for two" name="title" value="{{ $event_type->title }}">
                                 </div>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Title for event type (Spanish)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="example: Dinner for two" name="title_spanish" value="{{$event_type->title_spanish}}">
+                                           placeholder="example: Dinner for two" name="title_spanish" value="{{ $event_type->title_spanish }}">
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Title for event type (German)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="example: Dinner for two" name="title_german" value="{{$event_type->title_german}}">
+                                           placeholder="example: Dinner for two" name="title_german" value="{{ $event_type->title_german }}">
                                 </div>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Short description</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="enter description here" name="description" value="{{$event_type->description}}">
+                                           placeholder="enter description here" name="description" value="{{ $event_type->description }}">
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Short description (Spanish)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="enter description here" name="description_spanish" value="{{$event_type->description_spanish}}">
+                                           placeholder="enter description here" name="description_spanish" value="{{ $event_type->description_spanish }}">
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Short description (German)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="enter description here" name="description_german" value="{{$event_type->description_german}}">
+                                           placeholder="enter description here" name="description_german" value="{{ $event_type->description_german }}">
                                 </div>
                             </div>
                         </div>
@@ -97,12 +97,11 @@
                                         <div class="input-group input-group-file" data-plugin="inputGroupFile">
                                             <input type="text" class="form-control" readonly="" name="image_file">
                                             <div class="input-group-append">
-                    <span class="btn btn-success btn-file">
-                      <i class="icon wb-upload" aria-hidden="true"></i>
-                      <input type="file" name="image_file" multiple="">
-                    </span>
+                                                <span class="btn btn-success btn-file">
+                                                  <i class="icon wb-upload" aria-hidden="true"></i>
+                                                  <input type="file" name="image_file" multiple="">
+                                                </span>
                                             </div>
-
                                         </div>
                                         <div class="alert-danger p-2">Only use this option if you want to change current image!</div>
                                     </div>
@@ -126,13 +125,10 @@
                                 <button type="submit" class="btn btn-primary btn-block">Save</button>
                             </div>
                             <div class="col-md-6 col-lg-6">
-                                <a class="btn btn-danger btn-block" href="{{route('event-types.index')}}">Cancel</a>
+                                <a class="btn btn-danger btn-block" href="{{ route('event-types.index') }}">Cancel</a>
                             </div>
                         </div>
-
                     </form>
-
-
 
                     <style>
                         .slider {
@@ -373,19 +369,17 @@
                         }
                     </style>
 
-
-
                     <h4 class="example-title">Preview</h4>
                     <div class="mobile-preview">
                         <div class="slider">
                             <div class="slider-wrap">
                                 <div class="slider__slide">
                                     <div class="slider__slide-img">
-                                        <img src="{{Storage::url('event-types/'.$event_type->image)}}" alt="" id="image_preview"/>
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::url('event-types/'.$event_type->image) }}" alt="" id="image_preview"/>
                                     </div>
                                     <div class="slider__slide-text-wrap">
-                                        <h2 class="slider__slide-title" id="title_preview">{{$event_type->title}}</h2>
-                                        <span class="slider__slide-text" id="description_preview">{{$event_type->description}}</span>
+                                        <h2 class="slider__slide-title" id="title_preview">{{ $event_type->title }}</h2>
+                                        <span class="slider__slide-text" id="description_preview">{{ $event_type->description }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -394,7 +388,6 @@
                 </div>
             </div>
             <!-- End Panel Form Elements -->
-
         </div>
     </div>
 @endsection
@@ -418,7 +411,6 @@
             $('input[name ="description"]').keyup(function () {
                 $('#description_preview').html($(this).val());
             });
-
 
             function readURL(input) {
                 if (input.files && input.files[0]) {

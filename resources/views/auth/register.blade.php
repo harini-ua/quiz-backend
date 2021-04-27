@@ -13,14 +13,14 @@
         <div class="page-content">
             <div class="page-brand-info">
                 <div class="brand">
-                    <img class="brand-img" src="/assets/images/liqor.png" alt="...">
+                    <img class="brand-img" src="{{ asset('assets/images/liqor.png') }}" alt="...">
                     <h2 class="brand-text font-size-40">Liqor43</h2>
                 </div>
                 <p class="font-size-20">Welcome to registration for administrators</p>
             </div>
             <div class="page-register-main animation-slide-left animation-duration-1">
                 <div class="brand hidden-md-up">
-                    <img class="brand-img" src="/assets/images/liqor.png" alt="...">
+                    <img class="brand-img" src="{{ asset('assets/images/liqor.png') }}" alt="...">
                     <h3 class="brand-text font-size-40">Liqor43</h3>
                 </div>
                 <h3 class="font-size-24">Sign Up</h3>
@@ -56,7 +56,7 @@
                     @endif
                     <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
                 </form>
-                <p>Have account already? Please go to <a href="{{route('login')}}">Sign In</a></p>
+                <p>Have account already? Please go to <a href="{{ route('login') }}">Sign In</a></p>
                 <footer class="page-copyright">
                     <p>Liqor43</p>
                     <p>© {{ \Carbon\Carbon::now()->format('Y') }}. All RIGHT RESERVED.</p>

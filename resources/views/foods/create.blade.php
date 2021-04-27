@@ -5,7 +5,7 @@
 @endsection
 
 @section('menu')
-    @include('partials.menu',['active'=>4])
+    @include('partials.menu', ['active' => 4])
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
             <h1 class="page-title">Creating new food recipe</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Food recipes</li>
-                <li class="breadcrumb-item"><a href="{{route('foods.index')}}">All food recipes</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('foods.index') }}">All food recipes</a></li>
             </ol>
         </div>
         <div class="page-content">
@@ -32,7 +32,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Name of food recipe (English)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="example: Pinxtos" name="name" value="{{old('name')}}">
+                                           placeholder="example: Pinxtos" name="name" value="{{ old('name') }}">
                                 </div>
                                 <!-- End Example Placeholder -->
                             </div>
@@ -43,7 +43,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Name of food recipe (Spanish)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="example: Pinxtos" name="name_spanish" value="{{old('name_spanish')}}">
+                                           placeholder="example: Pinxtos" name="name_spanish" value="{{ old('name_spanish') }}">
                                 </div>
                                 <!-- End Example Placeholder -->
                             </div>
@@ -54,7 +54,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Name of food recipe (German)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
-                                           placeholder="example: Pinxtos" name="name_german" value="{{old('name_german')}}">
+                                           placeholder="example: Pinxtos" name="name_german" value="{{ old('name_german') }}">
                                 </div>
                                 <!-- End Example Placeholder -->
                             </div>
@@ -65,7 +65,7 @@
                                     <h4 class="example-title">Short description (English)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
                                            placeholder="enter description here" name="description"
-                                           value="{{old('description')}}">
+                                           value="{{ old('description') }}">
                                 </div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                                     <h4 class="example-title">Short description (Spanish)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
                                            placeholder="enter description here" name="description_spanish"
-                                           value="{{old('description_spanish')}}">
+                                           value="{{ old('description_spanish') }}">
                                 </div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                                     <h4 class="example-title">Short description (German)</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
                                            placeholder="enter description here" name="description_german"
-                                           value="{{old('description_german')}}">
+                                           value="{{ old('description_german') }}">
                                 </div>
                             </div>
                         </div>
@@ -145,7 +145,7 @@
                                 <div class="example-wrap">
                                     <h4 class="example-title">Minutes to prepare</h4>
                                     <input type="number" class="form-control form-control-lg" placeholder="example: 10"
-                                           name="minutes" value="{{old('minutes')}}">
+                                           name="minutes" value="{{ old('minutes') }}">
                                 </div>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
                                     <select class="form-control form-control-lg event-multiple" name="event_types[]"
                                             multiple="multiple">
                                         @foreach($event_types as $event)
-                                            <option value="{{$event->id}}">{{$event->title}}</option>
+                                            <option value="{{ $event->id }}">{{ $event->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -169,13 +169,21 @@
                                     <select class="form-control form-control-lg drinks-multiple" name="drinks[]"
                                             multiple="multiple">
                                         @foreach($drinks as $drink)
-                                            <option value="{{$drink->id}}">{{$drink->name}}</option>
+                                            <option value="{{ $drink->id }}">{{ $drink->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        @include('partials.food-drink-preview', ['image'=>'','type'=>'food','title'=>'Title','text'=>'Text body','minutes'=>'20','ingredients'=>3, 'complexity'=>2])
+                        @include('partials.food-drink-preview', [
+                            'image' => '',
+                            'type' => 'food',
+                            'title' => 'Title',
+                            'text' => 'Text body',
+                            'minutes' => '20',
+                            'ingredients' => 3,
+                            'complexity' => 2
+                        ])
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>

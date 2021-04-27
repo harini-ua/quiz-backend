@@ -50,7 +50,7 @@
     <div class="page">
         <div class="page-content container-fluid">
             <h4>
-                Hello {{Auth::user()->name}},
+                Hello {{ Auth::user()->name }},
             </h4>
             <h4>
                 You are regular user right now and you don't have access to administration panel

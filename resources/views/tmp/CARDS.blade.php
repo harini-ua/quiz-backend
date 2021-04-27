@@ -8,13 +8,13 @@
     <ul class="site-menu" data-plugin="menu">
         <li class="site-menu-category">General</li>
         <li class="site-menu-item active">
-            <a href="{{route('admin-home')}}">
+            <a href="{{ route('admin-home') }}">
                 <i class="site-menu-icon fas fa-home wb-dashboard"></i>
                 <span class="site-menu-title">Home</span>
             </a>
         </li>
         <li class="site-menu-item">
-            <a href="{{route('users.index')}}">
+            <a href="{{ route('users.index') }}">
                 <i class="site-menu-icon fas fa-users wb-dashboard"></i>
                 <span class="site-menu-title">Users</span>
             </a>
@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-lg-4 col-md-6">
                         <div class="card">
-                            <img class="card-img-top img-fluid w-full" src="/assets/images/login.jpg"
+                            <img class="card-img-top img-fluid w-full" src="{{ asset('assets/images/login.jpg') }}"
                                  alt="Card image cap">
                             <div class="card-block">
                                 <h4 class="card-title">Card title</h4>
@@ -90,7 +90,7 @@
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="card">
-                            <img class="card-img-top img-fluid w-full" src="/assets/images/login.jpg"
+                            <img class="card-img-top img-fluid w-full" src="{{ asset('assets/images/login.jpg') }}"
                                  alt="Card image cap">
                             <div class="card-block">
                                 <h4 class="card-title">Card title</h4>
@@ -102,7 +102,7 @@
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="card">
-                            <img class="card-img-top img-fluid w-full" src="/assets/images/login.jpg"
+                            <img class="card-img-top img-fluid w-full" src="{{ asset('assets/images/login.jpg') }}"
                                  alt="Card image cap">
                             <div class="card-block">
                                 <h4 class="card-title">Card title</h4>
@@ -117,7 +117,7 @@
                     <div class="col-lg-4 col-md-6">
                         <!-- Example Card Image overlays -->
                         <div class="card card-inverse">
-                            <img class="card-img w-full" src="/assets/images/login.jpg" alt="Card image">
+                            <img class="card-img w-full" src="{{ asset('assets/images/login.jpg') }}" alt="Card image">
                             <div class="card-img-overlay">
                                 <h4 class="card-title">Card title</h4>
                                 <p class="card-text">This is a wider card with supporting text below as a natural
@@ -129,7 +129,7 @@
                     <div class="col-lg-4 col-md-6">
                         <!-- Example Card Image overlays -->
                         <div class="card card-inverse">
-                            <img class="card-img w-full" src="/assets/images/login.jpg" alt="Card image">
+                            <img class="card-img w-full" src="{{ asset('assets/images/login.jpg') }}" alt="Card image">
                             <div class="card-img-overlay">
                                 <h4 class="card-title">Card title</h4>
                                 <p class="card-text">This is a wider card with supporting text below as a natural
@@ -141,7 +141,7 @@
                     <div class="col-lg-4 col-md-6">
                         <!-- Example Card Image overlays -->
                         <div class="card card-inverse">
-                            <img class="card-img w-full" src="/assets/images/login.jpg" alt="Card image">
+                            <img class="card-img w-full" src="{{ asset('assets/images/login.jpg') }}" alt="Card image">
                             <div class="card-img-overlay">
                                 <h4 class="card-title">Card title</h4>
                                 <p class="card-text">This is a wider card with supporting text below as a natural
@@ -155,7 +155,7 @@
                     <div class="col-lg-4 col-md-12">
                         <h4 class="example-title">Types</h4>
                         <div class="card">
-                            <img class="card-img-top img-fluid w-full" src="/assets/images/login.jpg"
+                            <img class="card-img-top img-fluid w-full" src="{{ asset('assets/images/login.jpg') }}"
                                  alt="Card image cap">
                             <div class="card-block">
                                 <h4 class="card-title">Card title</h4>
@@ -176,7 +176,7 @@
                     <div class="col-lg-4 col-md-12">
                         <h4 class="example-title">Types</h4>
                         <div class="card">
-                            <img class="card-img-top img-fluid w-full" src="/assets/images/login.jpg"
+                            <img class="card-img-top img-fluid w-full" src="{{ asset('assets/images/login.jpg') }}"
                                  alt="Card image cap">
                             <div class="card-block">
                                 <h4 class="card-title">Card title</h4>
@@ -197,7 +197,7 @@
                     <div class="col-lg-4 col-md-12">
                         <h4 class="example-title">Types</h4>
                         <div class="card">
-                            <img class="card-img-top img-fluid w-full" src="/assets/images/login.jpg"
+                            <img class="card-img-top img-fluid w-full" src="{{ asset('assets/images/login.jpg') }}"
                                  alt="Card image cap">
                             <div class="card-block">
                                 <h4 class="card-title">Card title</h4>

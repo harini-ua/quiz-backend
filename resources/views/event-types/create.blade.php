@@ -5,7 +5,7 @@
 @endsection
 
 @section('menu')
-    @include('partials.menu',['active'=>3])
+    @include('partials.menu', ['active' => 3])
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
             <h1 class="page-title">Edit event type</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Event types</li>
-                <li class="breadcrumb-item"><a href="{{route('event-types.index')}}">All event types</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('event-types.index') }}">All event types</a></li>
             </ol>
         </div>
 
@@ -105,9 +105,7 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
@@ -117,31 +115,12 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div class="row row-lg">
                             <div class="col-md-6 col-lg-6">
                                 <button type="submit" class="btn btn-primary btn-block">Save</button>
                             </div>
                         </div>
-
                     </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                     <style>
                         .slider {
@@ -382,8 +361,6 @@
                         }
                     </style>
 
-
-
                     <h4 class="example-title">Preview</h4>
                     <div class="mobile-preview">
                         <div class="slider">
@@ -400,15 +377,12 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <!-- End Panel Form Elements -->
-
         </div>
     </div>
 @endsection
-
 
 @section('js')
     <script>
@@ -428,7 +402,6 @@
             $('input[name ="description"]').keyup(function () {
                 $('#description_preview').html($(this).val());
             });
-
 
             function readURL(input) {
                 if (input.files && input.files[0]) {

@@ -1,42 +1,42 @@
 <style>
     @font-face {
         font-family: 'Hurme Geometric';
-        src: local("Hurme Geometric"), url("/assets/fonts/hurmegeometricsans4/hurmegeometricsans4_bold-webfont.woff") format("woff");
+        src: local("Hurme Geometric"), url("{{ asset('assets/fonts/hurmegeometricsans4/hurmegeometricsans4_bold-webfont.woff') }}") format("woff");
         font-weight: bold;
         font-style: normal;
     }
 
     @font-face {
         font-family: 'Hurme Geometric';
-        src: local("Hurme Geometric"), url("/assets/fonts/hurmegeometricsans4/hurmegeometricsans4_light-webfont.woff") format("woff");
+        src: local("Hurme Geometric"), url("{{ asset('assets/fonts/hurmegeometricsans4/hurmegeometricsans4_light-webfont.woff') }}") format("woff");
         font-weight: 300;
         font-style: normal;
     }
 
     @font-face {
         font-family: 'Hurme Geometric';
-        src: local("Hurme Geometric"), url("/assets/fonts/hurmegeometricsans4/hurmegeometricsans4_semibold-webfont.woff") format("woff");
+        src: local("Hurme Geometric"), url("{{ asset('assets/fonts/hurmegeometricsans4/hurmegeometricsans4_semibold-webfont.woff') }}") format("woff");
         font-weight: 500;
         font-style: normal;
     }
 
     @font-face {
         font-family: 'Hurme Geometric';
-        src: local("Hurme Geometric"), url("/assets/fonts/hurmegeometricsans4/hurmegeometricsans4-webfont.woff") format("woff");
+        src: local("Hurme Geometric"), url("{{ asset('assets/fonts/hurmegeometricsans4/hurmegeometricsans4-webfont.woff') }}") format("woff");
         font-weight: normal;
         font-style: normal;
     }
 
     @font-face {
         font-family: 'Roboto';
-        src: local("Roboto"), url("/assets/fonts/Roboto/Roboto-Regular.woff") format("woff");
+        src: local("Roboto"), url("{{ asset('assets/fonts/Roboto/Roboto-Regular.woff') }}") format("woff");
         font-weight: normal;
         font-style: normal;
     }
 
     @font-face {
         font-family: 'Roboto';
-        src: url("/assets/fonts/Roboto/Roboto-500.woff") format("woff");
+        src: url("{{ asset('assets/fonts/Roboto/Roboto-500.woff') }}") format("woff");
         font-weight: bold;
         font-style: normal;
     }
@@ -400,17 +400,17 @@
 <h3>Preview:</h3>
 <div class="mobile-preview">
     <div class="wrapper-card">
-        <div class="slider__slide slider__slide--sm {{$type === 'drink'?'slider--drinks':''}}">
+        <div class="slider__slide slider__slide--sm {{ $type === 'drink' ? 'slider--drinks' : '' }}">
             <div class="slider__slide-img">
-                <img src="{{$image}}" alt="" id="image_preview"/>
+                <img src="{{ $image }}" alt="" id="image_preview"/>
                 <span class="slider__slide-img__text" id="title">
-                    {{$title}}
+                    {{ $title }}
                 </span>
             </div>
             <div class="slider__slide-text-wrap">
                 <div class="slider__slide-recipe">
                     <div class="slider__slide-recipe__text entry-content" id="text">
-                        {{$text}}
+                        {{ $text }}
                     </div>
                     <div class="slider__slide-recipe__about">
                         <div class="slider__slide-recipe__about-rating">
@@ -419,7 +419,7 @@
                                 @for ($i = 0; $i < 5; $i++)
                                     @if($complexity > 0)
                                         <span class="slider__slide-recipe__about-rating__star rating__star--active"></span>
-                                        @php($complexity-=1)
+                                        @php($complexity -= 1)
                                     @else
                                         <span class="slider__slide-recipe__about-rating__star"></span>
                                     @endif
@@ -432,7 +432,7 @@
                                 @for ($i = 0; $i < 5; $i++)
                                     @if($ingredients > 0)
                                         <span class="slider__slide-recipe__about-rating__star rating__star--active"></span>
-                                        @php($ingredients-=1)
+                                        @php($ingredients -= 1)
                                     @else
                                         <span class="slider__slide-recipe__about-rating__star"></span>
                                     @endif

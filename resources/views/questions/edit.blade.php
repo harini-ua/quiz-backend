@@ -5,7 +5,7 @@
 @endsection
 
 @section('menu')
-    @include('partials.menu',['active'=>6])
+    @include('partials.menu', ['active' => 6])
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
             <h1 class="page-title">Editing question for quiz</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Quiz</li>
-                <li class="breadcrumb-item"><a href="{{route('questions.index')}}">All quiz questions</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('questions.index') }}">All quiz questions</a></li>
             </ol>
         </div>
         <div class="page-content">
@@ -24,7 +24,7 @@
                     <h3 class="panel-title">Fill the form</h3>
                 </div>
                 <div class="panel-body container-fluid">
-                    <form method="POST" action="{{ route('questions.update',['question'=>$question->id]) }}"
+                    <form method="POST" action="{{ route('questions.update', ['question' => $question->id]) }}"
                           enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
@@ -35,7 +35,7 @@
                                     <h4 class="example-title">Short description overlay (if needed) - English</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
                                            placeholder="enter description here" name="description"
-                                           value="{{$question->description}}">
+                                           value="{{ $question->description }}">
                                 </div>
                                 <!-- End Example Placeholder -->
                             </div>
@@ -47,7 +47,7 @@
                                     <h4 class="example-title">Short description overlay (if needed) - Spanish</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
                                            placeholder="enter description here" name="description_spanish"
-                                           value="{{$question->description_spanish}}">
+                                           value="{{ $question->description_spanish }}">
                                 </div>
                                 <!-- End Example Placeholder -->
                             </div>
@@ -59,7 +59,7 @@
                                     <h4 class="example-title">Short description overlay (if needed) - German</h4>
                                     <input type="text" class="form-control" id="inputPlaceholder"
                                            placeholder="enter description here" name="description_german"
-                                           value="{{$question->description_german}}">
+                                           value="{{ $question->description_german }}">
                                 </div>
                                 <!-- End Example Placeholder -->
                             </div>
@@ -71,16 +71,16 @@
                                     <div class="form-group">
                                         <select class="form-control" name="category">
                                             <option value="" disabled>Please select</option>
-                                            <option value="1" {{$question->category == 1 ? ' selected':''}}>How would
+                                            <option value="1" {{ selected($question->category == 1) }}>How would
                                                 you call it?
                                             </option>
-                                            <option value="2" {{$question->category == 2 ? ' selected':''}}>What can you
+                                            <option value="2" {{ selected($question->category == 2) }}>What can you
                                                 see?
                                             </option>
-                                            <option value="3" {{$question->category == 3 ? ' selected':''}}>What is this
+                                            <option value="3" {{ selected($question->category == 3) }}>What is this
                                                 sound?
                                             </option>
-                                            <option value="4" {{$question->category == 4 ? ' selected':''}}>What is it
+                                            <option value="4" {{ selected($question->category == 4) }}>What is it
                                                 made of?
                                             </option>
                                         </select>
@@ -107,7 +107,7 @@
                                     @if($question->image)
                                         <div>
                                             Current image:
-                                            <input type="image" src="{{Storage::url($question->image)}}" alt="">
+                                            <input type="image" src="{{ \Illuminate\Support\Facades\Storage::url($question->image) }}" alt="">
                                         </div>
                                     @endif
                                 </div>
@@ -133,7 +133,7 @@
                                     @if($question->audio)
                                         <div>
                                             Current audio:
-                                            <audio src="{{Storage::url($question->audio)}}">Test</audio>
+                                            <audio src="{{ Storage::url($question->audio) }}">Test</audio>
                                         </div>
                                     @endif
                                 </div>
