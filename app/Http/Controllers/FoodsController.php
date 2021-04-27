@@ -84,8 +84,8 @@ class FoodsController extends Controller
 
         $food = Food::create($request->all());
 
-        $food->drinks()->attach($request['drinks']);
-        $food->event_types()->sync($request['event_types']);
+        $food->drinks()->attach($request->get('drinks'));
+        $food->event_types()->sync($request->get('event_types'));
 
         return redirect()->route('foods.show', ['food' => $food->id]);
     }
@@ -170,8 +170,8 @@ class FoodsController extends Controller
         }
 
         $food->fill($request->all());
-        $food->drinks()->sync($request['drinks']);
-        $food->event_types()->sync($request['event_types']);
+        $food->drinks()->sync($request->get('drinks'));
+        $food->event_types()->sync($request->get('event_types'));
         $food->save();
 
         return redirect()->route('foods.edit', ['food' => $id]);

@@ -175,7 +175,8 @@ class AuthenticationController extends Controller
     {
         Log::alert('BEGINNING OF FB');
 
-        $user_facebook = Socialite::driver('facebook')->userFromToken($request['accessToken']);
+        $user_facebook = Socialite::driver('facebook')
+            ->userFromToken($request->get('accessToken'));
 
         $user = User::where('email', $user_facebook->getEmail())->first();
 

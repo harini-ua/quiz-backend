@@ -30,7 +30,7 @@ class UsersController extends Controller
      */
     public function setAdmin(Request $request)
     {
-        $user = User::find($request['id']);
+        $user = User::find($request->get('id'));
         $user->is_admin = true;
         $user->save();
 
@@ -46,7 +46,7 @@ class UsersController extends Controller
      */
     public function removeAdmin(Request $request)
     {
-        $user = User::find($request['id']);
+        $user = User::find($request->get('id'));
         $user->is_admin = false;
         $user->save();
 
@@ -62,7 +62,7 @@ class UsersController extends Controller
      */
     public function testBroadcast(Request $request)
     {
-        TestEvent::dispatch($request['id'], 'message-test');
+        TestEvent::dispatch($request->get('id'), 'message-test');
 
         return redirect()->route('users.index');
     }

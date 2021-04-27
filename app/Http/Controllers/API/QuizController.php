@@ -30,12 +30,12 @@ class QuizController extends Controller
      */
     public function generate_quiz(Request $request)
     {
-        Log::debug($request['quiz_name']);
+        Log::debug($request->get('quiz_name'));
 
         $quiz = Quiz::create([
             'players' => 0,
-            'name' => $request['quiz_name'],
-            'quiz_rounds' => $request['quiz_rounds'],
+            'name' => $request->get('quiz_name'),
+            'quiz_rounds' => $request->get('quiz_rounds'),
             'code' => mb_strtoupper(Str::random(4))
         ]);
 
@@ -56,7 +56,7 @@ class QuizController extends Controller
      */
     public function join_quiz(Request $request)
     {
-        $quiz = Quiz::where('code', $request['code'])->with('user')->first();
+        $quiz = Quiz::where('code', $request->get('code'))->with('user')->first();
 
         Log::warning((string) $request->all());
 
@@ -147,8 +147,8 @@ class QuizController extends Controller
         $quizQuestion = QuizQuestion::find($request->get('question_id'));
         $quiz = $quizPlayer->quiz;
 
-        if ($request['answer'] !== '') {
-            $answer = $request['answer'];
+        if ($request->get('answer') !== '') {
+            $answer = $request->get('answer');
         } else {
             $answer = ' ';
         }
@@ -191,7 +191,7 @@ class QuizController extends Controller
             $quizAnswer = QuizAnswer::where('quiz_id', $quizPlayer->quiz_id)
                 ->orderBy('updated_at', 'DESC')->first();
         } else {
-            $quizAnswer = QuizAnswer::find($request['answer_id']);
+            $quizAnswer = QuizAnswer::find($request->get('answer_id'));
         }
 
         ++$quizAnswer->points;
