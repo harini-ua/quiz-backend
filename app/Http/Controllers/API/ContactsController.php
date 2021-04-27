@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Contact;
-use App\Event;
-use App\Mail\InvitedEmail;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\InvitedEmail;
+use App\Models\Contact;
+use App\Models\Event;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -17,13 +16,15 @@ class ContactsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
         $user = $request->user();
+
         $contacts = $user->contacts()->where(function ($query) {
-            $query->where('email', '!=', null)->orWhere('number', '!=', null);
+            $query->whereNotNull('email')
+                ->orWhereNotNull('number');
         })->orderBy('name', 'asc')->get();
 
         Log::info($contacts);
@@ -45,15 +46,17 @@ class ContactsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        $contact = new Contact;
-        $contact->name = $request['name'];
-        $contact->number = $request['number'];
-        $contact->email = $request['email'];
-        $contact->location = $request['location'];
+        $contact = new Contact();
+        $contact->name = $request->get('name');
+        $contact->number = $request->get('number');
+        $contact->email = $request->get('email');
+        $contact->location = $request->get('location');
+
         $contact->user()->associate($request->user());
         $contact->save();
 
@@ -63,24 +66,41 @@ class ContactsController extends Controller
         return response()->json($contact);
     }
 
-
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function invite(Request $request)
     {
-        $event = Event::with('user')->find($request['event_id']);
+        $event = Event::with('user')->find($request->get('event_id'));
 
         Log::alert($event);
 
-        $contacts = $request['contacts'];
-
-        $contacts_collection = Contact::find($contacts);
-
-        foreach ($contacts_collection as $contact)
+        $contacts = Contact::find($request->get('contacts'));
+        foreach ($contacts as $contact)
         {
-            if ($contact->email){
-                $to = [['email'=>$contact->email, 'name'=>$contact->name]];
+            if ($contact->email) {
+                $to = [
+                    [
+                        'email' => $contact->email,
+                        'name' => $contact->name
+                    ]
+                ];
+
                 $email_code = Str::random();
-                Mail::to($to)->send(new InvitedEmail($contact->name, $event->user->name, $event->location, $email_code, $event->date_time));
-                $event->contacts()->attach($contact->id,['email_code'=>$email_code]);
+
+                Mail::to($to)->send(
+                    new InvitedEmail(
+                        $contact->name,
+                        $event->user->name,
+                        $event->location,
+                        $email_code,
+                        $event->date_time
+                    )
+                );
+
+                $event->contacts()->attach($contact->id, ['email_code' => $email_code]);
             }
         }
 
@@ -89,25 +109,35 @@ class ContactsController extends Controller
         return response()->json('success');
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function invited(Request $request)
     {
-        $event = Event::find($request['event_id']);
+        $event = Event::find($request->get('event_id'));
         $contacts = $event->contacts;
 
         return response()->json($contacts);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function attending(Request $request)
     {
-        $event = Event::find($request['event_id']);
-        $contacts_attending = $event->contacts()->where('attending', '=', true)->get();
-        $contacts_not_attending = $event->contacts()->where('attending', '=', false)->get();
-        $contacts_pending = $event->contacts()->where('attending','=',null)->get();
+        $event = Event::find($request->get('event_id'));
+        $contactsAttending = $event->contacts()->where('attending', true)->get();
+        $contactsNotAttending = $event->contacts()->where('attending', false)->get();
+        $contactsPending = $event->contacts()->whereNull('attending')->get();
 
         return response()->json([
-            'contacts_attending' => $contacts_attending,
-            'contacts_not_attending' => $contacts_not_attending,
-            'contacts_pending'=>$contacts_pending
+            'contacts_attending' => $contactsAttending,
+            'contacts_not_attending' => $contactsNotAttending,
+            'contacts_pending' => $contactsPending
         ]);
     }
 

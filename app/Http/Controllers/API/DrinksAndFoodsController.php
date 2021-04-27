@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Drink;
-use App\DrinkIngredient;
-use App\EventType;
-use App\Food;
-use App\FoodIngredient;
+use App\Models\Drink;
+use App\Models\DrinkIngredient;
+use App\Models\EventType;
+use App\Models\Food;
+use App\Models\FoodIngredient;
 use App\Mail\IngredientsEmail;
 use Aws\Polly\PollyClient;
 use Illuminate\Http\Request;
@@ -18,85 +18,120 @@ use Illuminate\Support\Facades\Mail;
 
 class DrinksAndFoodsController extends Controller
 {
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function drinks(Request $request)
     {
         Log::debug('/drinks before');
-        Log::debug($request->all());
+        Log::debug((string) $request->all());
 
-        $match_drinks = Food::find($request['food_id'])->drinks()
+        $matchDrinks = Food::find($request->get('food_id'))->drinks()
             ->get(['drinks.id', 'name', 'description', 'complexity_number', 'ingredients_number', 'minutes', 'image']);
-        Log::debug($match_drinks);
+        Log::debug($matchDrinks);
 
-        $other_drinks = Drink::whereNotIn('id', $match_drinks->pluck('id')->toArray())->get();;
-        Log::debug($other_drinks);
+        $matchDrinksIds = $matchDrinks->pluck('id')->toArray();
+
+        $otherDrinks = Drink::whereNotIn('id', $matchDrinksIds)->get();
+        Log::debug($otherDrinks);
 
         Log::info('/drinks');
 
-        return response()->json(['match_drinks' => $match_drinks, 'other_drinks' => $other_drinks]);
+        return response()->json([
+            'match_drinks' => $matchDrinks,
+            'other_drinks' => $otherDrinks
+        ]);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function foods(Request $request)
     {
-        $event_type = EventType::find($request['event_type_id']);
-        $foods = $event_type->foods;
+        $eventType = EventType::find($request->get('event_type_id'));
+        $foods = $eventType->foods;
 
         Log::info('/foods');
 
         return response()->json($foods);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function ingredients(Request $request)
     {
-        $food_ingredients = Food::find($request['food_id'])->food_ingredients;
-        $drink_ingredients = Drink::find($request['drink_id'])->drink_ingredients;
+        $foodIngredients = Food::find($request->get('food_id'))->food_ingredients;
+        $drinkIngredients = Drink::find($request->get('drink_id'))->drink_ingredients;
 
         return response()->json([
-            'food_ingredients' => $food_ingredients,
-            'drink_ingredients' => $drink_ingredients
+            'food_ingredients' => $foodIngredients,
+            'drink_ingredients' => $drinkIngredients
         ]);
     }
 
-    public function missing_ingredients (Request $request)
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function missing_ingredients(Request $request)
     {
-        $food_ingredients = FoodIngredient::find($request['food_ingredients']);
-        $food_ingredients_text = "";
-        foreach ($food_ingredients as $f_ingredient) {
-            $food_ingredients_text.="-  **" . $f_ingredient->name . "**" . " (*" . $f_ingredient->quantity ."*) \n";
+        $foodIngredients = FoodIngredient::find($request->get('food_ingredients'));
+
+        $foodIngredientsText = "";
+        foreach ($foodIngredients as $f_ingredient) {
+            $foodIngredientsText .= "-  **" . $f_ingredient->name . "**" . " (*" . $f_ingredient->quantity ."*) \n";
         }
 
-        $drink_ingredients = DrinkIngredient::find($request['drink_ingredients']);
-        $drink_ingredients_text = "";
-        foreach ($drink_ingredients as $d_ingredient) {
-            $drink_ingredients_text.="-  **" . $d_ingredient->name . "**" . " (*" . $d_ingredient->quantity ."*) \n";
+        $drinkIngredients = DrinkIngredient::find($request->get('drink_ingredients'));
+
+        $drinkIngredientsText = "";
+        foreach ($drinkIngredients as $d_ingredient) {
+            $drinkIngredientsText .= "-  **" . $d_ingredient->name . "**" . " (*" . $d_ingredient->quantity ."*) \n";
         }
 
         Mail::to(Auth::user())
             ->send(
                 new IngredientsEmail(
-                    $food_ingredients->first()->food->name,
-                    $drink_ingredients->first()->drink->name,
-                    $food_ingredients_text,
-                    $drink_ingredients_text
+                    $foodIngredients->first()->food->name,
+                    $drinkIngredients->first()->drink->name,
+                    $foodIngredientsText,
+                    $drinkIngredientsText
                 )
             );
 
         return response()->json('success');
     }
 
-    public function steps (Request $request)
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function steps(Request $request)
     {
         Log::debug('/API/steps');
-        Log::debug($request->all());
+        Log::debug((string) $request->all());
 
-        $food_steps = Food::find($request['food_id'])->food_steps;
-        $drink_steps = Drink::find($request['drink_id'])->drink_steps;
+        $foodSteps = Food::find($request->get('food_id'))->food_steps;
+        $drinkSteps = Drink::find($request->get('drink_id'))->drink_steps;
 
         return response()->json([
-            'food_steps' => $food_steps,
-            'drink_steps' => $drink_steps
+            'food_steps' => $foodSteps,
+            'drink_steps' => $drinkSteps
         ]);
     }
 
+    /**
+     * @param Request $request
+     */
     public function alexa_english(Request $request)
     {
         $config = [
@@ -112,7 +147,7 @@ class DrinksAndFoodsController extends Controller
 
         $args = [
             'OutputFormat' => 'mp3',
-            'Text' => "<speak><prosody rate='medium'>" . $request->input('text') ."</prosody></speak>",
+            'Text' => "<speak><prosody rate='medium'>" . $request->get('text') ."</prosody></speak>",
             'TextType' => 'ssml',
             'VoiceId' => 'Joanna',
         ];
@@ -125,6 +160,7 @@ class DrinksAndFoodsController extends Controller
         $length = $size; // Content length
         $start = 0; // Start byte
         $end = $size - 1; // End byte
+
         header('Content-Transfer-Encoding:chunked');
         header("Content-Type: audio/mpeg");
         header("Accept-Ranges: 0-$length");
@@ -134,6 +170,9 @@ class DrinksAndFoodsController extends Controller
         echo $resultData;
     }
 
+    /**
+     * @param Request $request
+     */
     public function alexa_spanish(Request $request)
     {
         $config = [
@@ -148,7 +187,7 @@ class DrinksAndFoodsController extends Controller
 
         $args = [
             'OutputFormat' => 'mp3',
-            'Text' => "<speak><prosody rate='medium'>" . $request->input('text') ."</prosody></speak>",
+            'Text' => "<speak><prosody rate='medium'>" . $request->get('text') ."</prosody></speak>",
             'TextType' => 'ssml',
             'VoiceId' => 'Conchita',
         ];
@@ -161,6 +200,7 @@ class DrinksAndFoodsController extends Controller
         $length = $size; // Content length
         $start = 0; // Start byte
         $end = $size - 1; // End byte
+
         header('Content-Transfer-Encoding:chunked');
         header("Content-Type: audio/mpeg");
         header("Accept-Ranges: 0-$length");
@@ -170,6 +210,9 @@ class DrinksAndFoodsController extends Controller
         echo $resultData;
     }
 
+    /**
+     * @param Request $request
+     */
     public function alexa_german(Request $request)
     {
         $config = [
@@ -184,7 +227,7 @@ class DrinksAndFoodsController extends Controller
 
         $args = [
             'OutputFormat' => 'mp3',
-            'Text' => "<speak><prosody rate='medium'>" . $request->input('text') ."</prosody></speak>",
+            'Text' => "<speak><prosody rate='medium'>" . $request->get('text') ."</prosody></speak>",
             'TextType' => 'ssml',
             'VoiceId' => 'Marlene',
         ];
@@ -197,6 +240,7 @@ class DrinksAndFoodsController extends Controller
         $length = $size; // Content length
         $start = 0; // Start byte
         $end = $size - 1; // End byte
+
         header('Content-Transfer-Encoding:chunked');
         header("Content-Type: audio/mpeg");
         header("Accept-Ranges: 0-$length");

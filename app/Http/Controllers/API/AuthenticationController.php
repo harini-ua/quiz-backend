@@ -130,7 +130,7 @@ class AuthenticationController extends Controller
         $user->language = $request['language'];
         $user->save();
 
-        return response()->json('success',200);
+        return response()->json('success');
     }
 
     public function login_facebook(Request $request)

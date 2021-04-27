@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Contact;
-use App\Event;
-use App\EventType;
+use App\Http\Controllers\Controller;
+use App\Models\Contact;
+use App\Models\Event;
+use App\Models\EventType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -18,17 +17,17 @@ class EventsController extends Controller
     public function types()
     {
         if (Auth::user()->language === 'english') {
-            $event_types = EventType::select('id','title','description','image')->get();
+            $eventTypes = EventType::select('id', 'title', 'description', 'image')->get();
 
         } else {
-            $event_types = EventType::select(
+            $eventTypes = EventType::select(
                 'id', 'title_'. Auth::user()->language. ' as title', 'description_'. Auth::user()->language. ' as description', 'image'
             )->get();
         }
 
         Log::info('/events/types');
 
-        return response()->json($event_types);
+        return response()->json($eventTypes);
     }
 
     /**
@@ -55,19 +54,20 @@ class EventsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        $event_type = EventType::find($request['event_type_id']);
+        $eventType = EventType::find($request->get('event_type_id'));
 
         $event = new Event;
-        $event->name = $request['name'];
-        $event->date_time = Carbon::parse($request['dateAndTime'])->toDateTimeString();
-        $event->location = $request['location'];
+        $event->name = $request->get('name');
+        $event->date_time = Carbon::parse($request->get('dateAndTime'))->toDateTimeString();
+        $event->location = $request->get('location');
         $event->whatsapp_code = Str::random();
         $event->user()->associate($request->user());
-        $event->event_type()->associate($event_type);
+        $event->event_type()->associate($eventType);
         $event->save();
 
         Log::debug('/events/store');
@@ -121,51 +121,84 @@ class EventsController extends Controller
         //
     }
 
+    /**
+     * Event by whatsapp code
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function whatsapp_code(Request $request)
     {
-        $event = Event::where('whatsapp_code', '=', $request['whatsapp_code'])
+        $event = Event::where('whatsapp_code', $request->get('whatsapp_code'))
             ->with('user')->first();
 
         return response()->json($event);
     }
 
+    /**
+     * Whatsapp attending
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function whatsapp_attending(Request $request)
     {
-        $event = Event::find($request['event_id']);
+        $event = Event::find($request->get('event_id'));
 
         $contact = new Contact;
-        $contact->name = $request['name'];
+        $contact->name = $request->get('name');
         $contact->user()->associate($event->user);
         $contact->save();
 
-        $contact->events()->attach($request['event_id'],['attending' => $request['attending']]);
+        $contact->events()->attach($request->get('event_id'), [
+            'attending' => $request->get('attending')
+        ]);
 
         return response()->json(['status' => 'success']);
     }
 
-    public function email_code (Request $request)
+    /**
+     * Email code
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function email_code(Request $request)
     {
         $event = Event::whereHas('contacts', function($query) use ($request) {
-            $query->where('email_code','=',$request['email_code']);
+            $query->where('email_code', $request->get('email_code'));
         })->with('user')->first();
 
         return response()->json([
             'event_name' => $event->name,
-            'host_name' => $event->user->name]
-        );
+            'host_name' => $event->user->name
+        ]);
     }
 
-    public function email_attending (Request $request)
+    /**
+     * Email attending
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function email_attending(Request $request)
     {
         $event = Event::whereHas('contacts', function($query) use ($request) {
-            $query->where('email_code','=',$request['email_code']);
+            $query->where('email_code', $request->get('email_code'));
         })->with('user')->first();
 
         $contact = Contact::whereHas('events', function($query) use ($request) {
-            $query->where('email_code','=',$request['email_code']);
+            $query->where('email_code', $request->get('email_code'));
         })->first();
 
-        $contact->events()->updateExistingPivot($event->id,['email_code'=>null,'attending'=>$request['attending']]);
+        $contact->events()->updateExistingPivot($event->id, [
+            'email_code' => null,
+            'attending' => $request->get('attending')
+        ]);
 
         return response()->json(['status' => 'success']);
     }
