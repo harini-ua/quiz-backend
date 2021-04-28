@@ -66,7 +66,7 @@ class QuizQuestionsController extends Controller
             $file = $request->file('image_file');
             $file_name = $file->hashName();
 
-            $path ='questions/' . $file_name;
+            $path = 'questions/' . $file_name;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {

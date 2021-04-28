@@ -68,7 +68,7 @@ class DrinksController extends Controller
         $file = $request->file('image_file');
         $file_name = $file->hashName();
 
-        $path ='drinks/' . $file_name;
+        $path = 'drinks/' . $file_name;
 
         $image = Image::make($file);
         $image->resize(1080, null, function ($constraint) {
@@ -307,7 +307,7 @@ class DrinksController extends Controller
             $file = $request->file('image_file');
             $file_name = $file->hashName();
 
-            $path ='drink-steps/' . $file_name;
+            $path = 'drink-steps/' . $file_name;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -376,7 +376,7 @@ class DrinksController extends Controller
             $file = $request->file('image_file');
             $file_name = $file->hashName();
 
-            $path ='drink-steps/' . $file_name;
+            $path = 'drink-steps/' . $file_name;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {

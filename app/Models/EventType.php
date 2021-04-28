@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class EventType extends Model
 {
@@ -18,6 +19,23 @@ class EventType extends Model
         'title' , 'description', 'image', 'title_spanish', 'title_german', 'description_spanish',
         'description_german'
     ];
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleted(function($eventType){
+            $image = 'event-types/'.$eventType->image;
+            if (Storage::exists($image)) {
+                Storage::delete($image);
+            }
+        });
+    }
 
     public function foods()
     {
