@@ -44,12 +44,12 @@ class Food extends Model
         });
     }
 
-    public function food_ingredients()
+    public function foodIngredients()
     {
         return $this->hasMany(FoodIngredient::class);
     }
 
-    public function food_steps()
+    public function foodSteps()
     {
         return $this->hasMany(FoodStep::class);
     }
@@ -59,7 +59,7 @@ class Food extends Model
         return $this->belongsToMany(Drink::class);
     }
 
-    public function event_types()
+    public function eventTypes()
     {
         return $this->belongsToMany(EventType::class);
     }

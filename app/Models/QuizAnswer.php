@@ -15,12 +15,12 @@ class QuizAnswer extends Model
         'answer', 'points'
     ];
 
-    public function quiz_question()
+    public function quizQuestion()
     {
         return $this->belongsTo(QuizQuestion::class);
     }
 
-    public function quiz_player()
+    public function quizPlayer()
     {
         return $this->belongsTo(QuizPlayer::class);
     }

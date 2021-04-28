@@ -66,9 +66,9 @@ class DrinksController extends Controller
         }
 
         $file = $request->file('image_file');
-        $file_name = $file->hashName();
+        $fileName = $file->hashName();
 
-        $path = 'drinks/' . $file_name;
+        $path = 'drinks/' . $fileName;
 
         $image = Image::make($file);
         $image->resize(1080, null, function ($constraint) {
@@ -76,7 +76,7 @@ class DrinksController extends Controller
         });
         Storage::put($path, $image->stream('jpg', 100));
 
-        $request['image'] = $file_name;
+        $request['image'] = $fileName;
 
         $drink = Drink::create($request->all());
 
@@ -142,9 +142,9 @@ class DrinksController extends Controller
 
         if ($request->file('image_file')) {
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path = 'drinks/' . $file_name;
+            $path = 'drinks/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -152,7 +152,7 @@ class DrinksController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
         }
 
         $drink->fill($request->all());
@@ -197,11 +197,11 @@ class DrinksController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function ingredient_destroy($drink_id,$ingredient_id)
+    public function ingredient_destroy($drink_id, $ingredient_id)
     {
         $ingredient = DrinkIngredient::destroy($ingredient_id);
 
-        return redirect()->route('drinks.show', ['drink'=>$drink_id]);
+        return redirect()->route('drinks.show', ['drink' => $drink_id]);
     }
 
     /**
@@ -228,9 +228,9 @@ class DrinksController extends Controller
 
         $drink = Drink::find($id);
 
-        $drink_ingredient = DrinkIngredient::create($request->all());
-        $drink_ingredient->drink()->associate($drink);
-        $drink_ingredient->save();
+        $drinkIngredient = DrinkIngredient::create($request->all());
+        $drinkIngredient->drink()->associate($drink);
+        $drinkIngredient->save();
 
         return redirect()->route('drinks.show', ['drink' => $id]);
     }
@@ -291,23 +291,23 @@ class DrinksController extends Controller
                 ->withInput();
         }
 
-        $drink_step = DrinkStep::find($step);
+        $drinkStep = DrinkStep::find($step);
 
         if ($request->file('video_file')) {
             $request['video'] = Storage::putFile('drink-steps', $request->file('video_file'));
             $request['image'] = null;
-            if ($drink_step->video){
-                Storage::delete($drink_step->video);
+            if ($drinkStep->video){
+                Storage::delete($drinkStep->video);
             }
-            if ($drink_step->image){
-                Storage::delete('drink-steps/' . $drink_step->image);
+            if ($drinkStep->image){
+                Storage::delete('drink-steps/' . $drinkStep->image);
             }
         }
-        if ($request->file('image_file')){
+        if ($request->file('image_file')) {
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path = 'drink-steps/' . $file_name;
+            $path = 'drink-steps/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -315,19 +315,19 @@ class DrinksController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
             $request['video'] = null;
 
-            if ($drink_step->video){
-                Storage::delete($drink_step->video);
+            if ($drinkStep->video){
+                Storage::delete($drinkStep->video);
             }
-            if ($drink_step->image){
-                Storage::delete('drink-steps/' . $drink_step->image);
+            if ($drinkStep->image){
+                Storage::delete('drink-steps/' . $drinkStep->image);
             }
         }
 
-        $drink_step->fill($request->all());
-        $drink_step->save();
+        $drinkStep->fill($request->all());
+        $drinkStep->save();
 
         return redirect()->route('drinks.show', ['drink' => $id]);
     }
@@ -374,9 +374,9 @@ class DrinksController extends Controller
 
         if ($request->file('image_file')){
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path = 'drink-steps/' . $file_name;
+            $path = 'drink-steps/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -384,7 +384,7 @@ class DrinksController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
         }
 
         if ($request->file('video_file')) {
@@ -393,9 +393,9 @@ class DrinksController extends Controller
 
         $drink = Drink::find($id);
 
-        $drink_step = DrinkStep::create($request->all());
-        $drink_step->drink()->associate($drink);
-        $drink_step->save();
+        $drinkStep = DrinkStep::create($request->all());
+        $drinkStep->drink()->associate($drink);
+        $drinkStep->save();
 
         return redirect()->route('drinks.show', ['drink' => $id]);
     }

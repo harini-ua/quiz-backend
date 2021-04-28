@@ -11,7 +11,7 @@ class QuizUsedQuestion extends Model
         return $this->belongsTo(Quiz::class);
     }
 
-    public function quiz_question()
+    public function quizQuestion()
     {
         return $this->belongsTo(QuizQuestion::class);
     }

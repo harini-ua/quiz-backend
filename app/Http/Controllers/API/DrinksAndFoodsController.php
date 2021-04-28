@@ -86,15 +86,15 @@ class DrinksAndFoodsController extends Controller
         $foodIngredients = FoodIngredient::find($request->get('food_ingredients'));
 
         $foodIngredientsText = "";
-        foreach ($foodIngredients as $f_ingredient) {
-            $foodIngredientsText .= "-  **" . $f_ingredient->name . "**" . " (*" . $f_ingredient->quantity ."*) \n";
+        foreach ($foodIngredients as $fIngredient) {
+            $foodIngredientsText .= "-  **" . $fIngredient->name . "**" . " (*" . $fIngredient->quantity ."*) \n";
         }
 
         $drinkIngredients = DrinkIngredient::find($request->get('drink_ingredients'));
 
         $drinkIngredientsText = "";
-        foreach ($drinkIngredients as $d_ingredient) {
-            $drinkIngredientsText .= "-  **" . $d_ingredient->name . "**" . " (*" . $d_ingredient->quantity ."*) \n";
+        foreach ($drinkIngredients as $dIngredient) {
+            $drinkIngredientsText .= "-  **" . $dIngredient->name . "**" . " (*" . $dIngredient->quantity ."*) \n";
         }
 
         Mail::to(Auth::user())

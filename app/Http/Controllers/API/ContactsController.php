@@ -88,19 +88,19 @@ class ContactsController extends Controller
                     ]
                 ];
 
-                $email_code = Str::random();
+                $emailCode = Str::random();
 
                 Mail::to($to)->send(
                     new InvitedEmail(
                         $contact->name,
                         $event->user->name,
                         $event->location,
-                        $email_code,
+                        $emailCode,
                         $event->date_time
                     )
                 );
 
-                $event->contacts()->attach($contact->id, ['email_code' => $email_code]);
+                $event->contacts()->attach($contact->id, ['email_code' => $emailCode]);
             }
         }
 

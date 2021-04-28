@@ -67,7 +67,7 @@ class EventsController extends Controller
         $event->location = $request->get('location');
         $event->whatsapp_code = Str::random();
         $event->user()->associate($request->user());
-        $event->event_type()->associate($eventType);
+        $event->eventType()->associate($eventType);
         $event->save();
 
         Log::debug('/events/store');

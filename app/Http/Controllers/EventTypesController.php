@@ -18,9 +18,9 @@ class EventTypesController extends Controller
      */
     public function index()
     {
-        $event_types = EventType::all();
+        $eventTypes = EventType::all();
 
-        return view('event-types.index', compact('event_types'));
+        return view('event-types.index', compact('eventTypes'));
     }
 
     /**
@@ -60,9 +60,9 @@ class EventTypesController extends Controller
         }
 
         $file = $request->file('image_file');
-        $file_name = $file->hashName();
+        $fileName = $file->hashName();
 
-        $path ='event-types/' . $file_name;
+        $path ='event-types/' . $fileName;
 
         $image = Image::make($file);
         $image->resize(1080, null, function ($constraint) {
@@ -70,7 +70,7 @@ class EventTypesController extends Controller
         });
         Storage::put($path, $image->stream('jpg', 100));
 
-        $request['image'] = $file_name;
+        $request['image'] = $fileName;
 
         EventType::create($request->all());
 
@@ -96,9 +96,9 @@ class EventTypesController extends Controller
      */
     public function edit($id)
     {
-        $event_type = EventType::find($id);
+        $eventType = EventType::find($id);
 
-        return view('event-types.edit', compact('event_type'));
+        return view('event-types.edit', compact('eventType'));
     }
 
     /**
@@ -128,15 +128,15 @@ class EventTypesController extends Controller
                 ->withInput();
         }
 
-        $event_type = EventType::find($id);
+        $eventType = EventType::find($id);
 
         if ($request->file('image_file')) {
-            Storage::delete('event-types/' . $event_type->image);
+            Storage::delete('event-types/' . $eventType->image);
 
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path = 'event-types/' . $file_name;
+            $path = 'event-types/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -144,11 +144,11 @@ class EventTypesController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
         }
 
-        $event_type->fill($request->all());
-        $event_type->save();
+        $eventType->fill($request->all());
+        $eventType->save();
 
         return redirect()->route('event-types.index');
     }

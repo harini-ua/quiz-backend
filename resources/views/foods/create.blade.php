@@ -155,7 +155,7 @@
                                     <h4 class="example-title">Event type suitable for this food?</h4>
                                     <select class="form-control form-control-lg event-multiple" name="event_types[]"
                                             multiple="multiple">
-                                        @foreach($event_types as $event)
+                                        @foreach($eventTypes as $event)
                                             <option value="{{ $event->id }}">{{ $event->title }}</option>
                                         @endforeach
                                     </select>

@@ -7,7 +7,6 @@ use App\Models\QuizQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Intervention\Image\Facades\Image;
 
@@ -64,9 +63,9 @@ class QuizQuestionsController extends Controller
 
         if ($request->file('image_file')) {
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path = 'questions/' . $file_name;
+            $path = 'questions/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -74,7 +73,7 @@ class QuizQuestionsController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
         }
 
         if ($request->file('audio_file')) {
@@ -142,9 +141,9 @@ class QuizQuestionsController extends Controller
             Storage::delete('questions/' . $question->image);
 
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path ='questions/' . $file_name;
+            $path ='questions/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -152,7 +151,7 @@ class QuizQuestionsController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
         }
 
         if ($request->file('audio_file')) {
@@ -176,7 +175,7 @@ class QuizQuestionsController extends Controller
      */
     public function destroy($id)
     {
-        $quiz_question = QuizQuestion::destroy($id);
+        $quizQuestion = QuizQuestion::destroy($id);
 
         return redirect()->route('questions.index');
     }

@@ -37,12 +37,12 @@ class Drink extends Model
         });
     }
 
-    public function drink_ingredients()
+    public function drinkIngredients()
     {
         return $this->hasMany(DrinkIngredient::class);
     }
 
-    public function drink_steps()
+    public function drinkSteps()
     {
         return $this->hasMany(DrinkStep::class);
     }

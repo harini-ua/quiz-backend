@@ -20,34 +20,34 @@ class Quiz extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function quiz_players()
+    public function quizPlayers()
     {
         return $this->hasMany(QuizPlayer::class)
             ->orderBy('points','DESC');
     }
 
-    public function quiz_answers()
+    public function quizAnswers()
     {
         return $this->hasMany(QuizAnswer::class);
     }
 
-    public function quiz_answers_for_question($id)
+    public function quizAnswersByQuestion($id)
     {
         return $this->hasMany(QuizAnswer::class)
-            ->where('quiz_question_id','=',$id);
+            ->where('quiz_question_id', $id);
     }
 
-    public function quiz_answers_for_question_for_vote($id)
+    public function quizAnswersByQuestionByVote($id)
     {
         return $this->hasMany(QuizAnswer::class)
-            ->where('quiz_question_id','=',$id)
-            ->where('answer','!=',"");
+            ->where('quiz_question_id', $id)
+            ->where('answer', "");
     }
 
-    public function quiz_host_answers_for_question($id, $host_id)
+    public function quizHostAnswersByQuestion($id, $host_id)
     {
         return $this->hasMany(QuizAnswer::class)
-            ->where('quiz_question_id','=',$id)
-            ->where('quiz_player_id','=',$host_id);
+            ->where('quiz_question_id', $id)
+            ->where('quiz_player_id', $host_id);
     }
 }

@@ -30,8 +30,8 @@
         <div class="page-content container-fluid">
             <div class="example-wrap">
                 <div class="row">
-                    @if ($event_types->count())
-                        @foreach($event_types as $event)
+                    @if ($eventTypes->count())
+                        @foreach($eventTypes as $event)
                             <div class="col-lg-3 col-md-6">
                                 <div class="card">
                                     <img class="card-img-top img-fluid w-full"

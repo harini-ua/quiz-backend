@@ -45,11 +45,12 @@ class HomeController extends Controller
      */
     public function test (Request $request) {
         $quiz = Quiz::find(110);
-        $nswers = $quiz->quiz_answers()->with('quiz_player')->get();
+        $nswers = $quiz->quizAnswers()->with('quizPlayer')->get();
 
-        $used_questions = QuizUsedQuestion::where('quiz_id', '=', 146);
+        $usedQuestions = QuizUsedQuestion::where('quiz_id', '=', 146);
         $question = QuizQuestion::where('category', '=', 1)
-            ->whereNotIn('id',$used_questions->pluck('quiz_question_id')->toArray())->get();
+            ->whereNotIn('id', $usedQuestions->pluck('quiz_question_id')->toArray())
+            ->get();
 
         dd($question->pluck('id'));
 

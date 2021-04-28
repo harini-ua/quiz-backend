@@ -35,9 +35,9 @@ class FoodsController extends Controller
     public function create()
     {
         $drinks = Drink::all();
-        $event_types = EventType::all();
+        $eventTypes = EventType::all();
 
-        return view('foods.create', compact('drinks','event_types'));
+        return view('foods.create', compact('drinks','eventTypes'));
     }
 
     /**
@@ -70,9 +70,9 @@ class FoodsController extends Controller
         }
 
         $file = $request->file('image_file');
-        $file_name = $file->hashName();
+        $fileName = $file->hashName();
 
-        $path = 'foods/' . $file_name;
+        $path = 'foods/' . $fileName;
 
         $image = Image::make($file);
         $image->resize(1080, null, function ($constraint) {
@@ -80,12 +80,12 @@ class FoodsController extends Controller
         });
         Storage::put($path, $image->stream('jpg', 100));
 
-        $request['image'] = $file_name;
+        $request['image'] = $fileName;
 
         $food = Food::create($request->all());
 
         $food->drinks()->attach($request->get('drinks'));
-        $food->event_types()->sync($request->get('event_types'));
+        $food->eventTypes()->sync($request->get('event_types'));
 
         return redirect()->route('foods.show', ['food' => $food->id]);
     }
@@ -99,9 +99,9 @@ class FoodsController extends Controller
     public function show($id)
     {
         $food = Food::find($id);
-        $event_types = EventType::all();
+        $eventTypes = EventType::all();
 
-        return view('foods.show', compact('food'));
+        return view('foods.show', compact('food', 'eventTypes'));
     }
 
     /**
@@ -115,9 +115,9 @@ class FoodsController extends Controller
     {
         $food = Food::find($id);
         $drinks = Drink::all();
-        $event_types = EventType::all();
+        $eventTypes = EventType::all();
 
-        return view('foods.edit', compact('food', 'drinks', 'event_types'));
+        return view('foods.edit', compact('food', 'drinks', 'eventTypes'));
     }
 
     /**
@@ -156,9 +156,9 @@ class FoodsController extends Controller
             Storage::delete('event-types/' . $food->image);
 
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path = 'foods/' . $file_name;
+            $path = 'foods/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -166,12 +166,12 @@ class FoodsController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
         }
 
         $food->fill($request->all());
         $food->drinks()->sync($request->get('drinks'));
-        $food->event_types()->sync($request->get('event_types'));
+        $food->eventTypes()->sync($request->get('event_types'));
         $food->save();
 
         return redirect()->route('foods.edit', ['food' => $id]);
@@ -217,7 +217,7 @@ class FoodsController extends Controller
     {
         $ingredient = FoodIngredient::destroy($ingredient_id);
 
-        return redirect()->route('foods.show', ['food'=>$food_id]);
+        return redirect()->route('foods.show', ['food' => $food_id]);
     }
 
     /**
@@ -244,9 +244,9 @@ class FoodsController extends Controller
 
         $food = Food::find($id);
 
-        $food_ingredient = FoodIngredient::create($request->all());
-        $food_ingredient->food()->associate($food);
-        $food_ingredient->save();
+        $foodIngredient = FoodIngredient::create($request->all());
+        $foodIngredient->food()->associate($food);
+        $foodIngredient->save();
 
         return redirect()->route('foods.show', ['food' => $id]);
     }
@@ -307,23 +307,23 @@ class FoodsController extends Controller
                 ->withInput();
         }
 
-        $food_step = FoodStep::find($step);
+        $foodStep = FoodStep::find($step);
 
         if ($request->file('video_file')) {
             $request['video'] = Storage::putFile('food-steps', $request->file('video_file'));
             $request['image'] = null;
-            if ($food_step->video){
-                Storage::delete($food_step->video);
+            if ($foodStep->video){
+                Storage::delete($foodStep->video);
             }
-            if ($food_step->image){
-                Storage::delete('food-steps/' . $food_step->image);
+            if ($foodStep->image){
+                Storage::delete('food-steps/' . $foodStep->image);
             }
         }
         elseif ($request->file('image_file')) {
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path = 'food-steps/' . $file_name;
+            $path = 'food-steps/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -331,19 +331,19 @@ class FoodsController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
             $request['video'] = null;
 
-            if ($food_step->video){
-                Storage::delete($food_step->video);
+            if ($foodStep->video){
+                Storage::delete($foodStep->video);
             }
-            if ($food_step->image){
-                Storage::delete('food-steps/' . $food_step->image);
+            if ($foodStep->image){
+                Storage::delete('food-steps/' . $foodStep->image);
             }
         }
 
-        $food_step->fill($request->all());
-        $food_step->save();
+        $foodStep->fill($request->all());
+        $foodStep->save();
 
         return redirect()->route('foods.show', ['food' => $id]);
     }
@@ -390,9 +390,9 @@ class FoodsController extends Controller
 
         if ($request->file('image_file')) {
             $file = $request->file('image_file');
-            $file_name = $file->hashName();
+            $fileName = $file->hashName();
 
-            $path = 'food-steps/' . $file_name;
+            $path = 'food-steps/' . $fileName;
 
             $image = Image::make($file);
             $image->resize(1080, null, function ($constraint) {
@@ -400,7 +400,7 @@ class FoodsController extends Controller
             });
             Storage::put($path, $image->stream('jpg', 100));
 
-            $request['image'] = $file_name;
+            $request['image'] = $fileName;
         }
 
         if ($request->file('video_file')) {
@@ -409,9 +409,9 @@ class FoodsController extends Controller
 
         $food = Food::find($id);
 
-        $food_step = FoodStep::create($request->all());
-        $food_step->food()->associate($food);
-        $food_step->save();
+        $foodStep = FoodStep::create($request->all());
+        $foodStep->food()->associate($food);
+        $foodStep->save();
 
         return redirect()->route('foods.show', ['food' => $id]);
     }

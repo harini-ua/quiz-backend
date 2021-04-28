@@ -103,19 +103,15 @@ class QuizController extends Controller
         $usedQuestions = QuizUsedQuestion::where('quiz_id', $request->get('quiz_id'));
         $quizQuestionIds = $usedQuestions->pluck('quiz_question_id')->toArray();
 
-        $question = QuizQuestion::where('category', $request->get('category'))
+        $questions = QuizQuestion::where('category', $request->get('category'))
             ->whereNotIn('id', $quizQuestionIds)
             ->get();
 
-        if ($question->isNotEmpty()) {
-            $question = $question->random();
-        } else {
+        if ($questions->isEmpty()) {
             return response()->json(['questions' => false]);
         }
 
-        if (!$question) {
-            return response()->json(['questions' => false]);
-        }
+        $question = $questions->random();
 
         $quiz = Quiz::find($request->get('quiz_id'));
 
@@ -124,7 +120,7 @@ class QuizController extends Controller
 
         $used = new QuizUsedQuestion;
         $used->quiz()->associate($quiz);
-        $used->quiz_question()->associate($question);
+        $used->quizQuestion()->associate($question);
         $used->save();
 
         Log::info($request->get('category'));
@@ -145,35 +141,36 @@ class QuizController extends Controller
     {
         $quizPlayer = QuizPlayer::where('socket_id', $request->get('socket_id'))->first();
         $quizQuestion = QuizQuestion::find($request->get('question_id'));
+
         $quiz = $quizPlayer->quiz;
 
+        $answer = ' ';
         if ($request->get('answer') !== '') {
             $answer = $request->get('answer');
-        } else {
-            $answer = ' ';
         }
 
         $quizAnswer = new QuizAnswer;
         $quizAnswer->answer = $answer;
-        $quizAnswer->quiz_player()->associate($quizPlayer);
-        $quizAnswer->quiz_question()->associate($quizQuestion);
+        $quizAnswer->quizPlayer()->associate($quizPlayer);
+        $quizAnswer->quizQuestion()->associate($quizQuestion);
         $quizAnswer->quiz()->associate($quiz);
         $quizAnswer->save();
 
-        $quizAnswers = $quiz->quiz_answers_for_question($request->get('question_id'))->count();
+        $quizAnswers = $quiz->quizAnswersByQuestion($request->get('question_id'))->count();
+
         Log::info($quizAnswers . ' COUNT');
 
-        if ($quiz->quiz_answers_for_question($request->get('question_id'))->count() == $quiz->players) {
+        if ($quizAnswers == $quiz->players) {
             Log::info('VotingEvent');
 
-            $quizAnswers = $quiz->quiz_answers_for_question_for_vote($request->get('question_id'))
-                ->with('quiz_player')->get();
+            $quizAnswers = $quiz->quizAnswersByQuestionByVote($request->get('question_id'))
+                ->with('quizPlayer')->get();
 
             event(new VotingEvent($quiz->code, $quizAnswers));
         }
 
         return response()->json([
-            'left' => $quiz->players - $quiz->quiz_answers_for_question($request->get('question_id'))->count()
+            'left' => $quiz->players - $quizAnswers
         ]);
     }
 
@@ -206,11 +203,11 @@ class QuizController extends Controller
         $quiz = $quizAnswer->quiz;
 
         $quizQuestionId = $quizAnswer->quiz_question->id;
-        $quizAnswers = $quiz->quiz_answers_for_question($quizQuestionId);
+        $quizAnswers = $quiz->quizAnswersByQuestion($quizQuestionId);
 
         if ($quiz->players == $quizAnswers->sum('points')) {
             $favorite = $quizAnswers->orderBy('points', 'DESC')->first();
-            $quizPlayer = $favorite->quiz_player;
+            $quizPlayer = $favorite->quizPlayer();
             $quizPlayer->points += 3;
             $quizPlayer->save();
 
@@ -220,14 +217,14 @@ class QuizController extends Controller
             $roundsLeft = $quiz->quiz_rounds - $quiz->answered_question;
 
             if ($roundsLeft == 0) {
-                event(new QuizEndedEvent($quiz->code, $quiz->quiz_players, $quiz->quiz_players()->first()));
+                event(new QuizEndedEvent($quiz->code, $quiz->quizPlayers(), $quiz->quizPlayers()->first()));
             } else {
-                event(new PlayersPointsEvent($quiz->code, $quiz->quiz_players, $quizPlayer, $favorite->answer, $roundsLeft));
+                event(new PlayersPointsEvent($quiz->code, $quiz->quizPlayers(), $quizPlayer, $favorite->answer, $roundsLeft));
             }
         }
 
         return response()->json([
-            'left' => $quiz->players - $quiz->quiz_answers_for_question($quizQuestionId)->sum('points')
+            'left' => $quiz->players - $quiz->quizAnswersByQuestion($quizQuestionId)->sum('points')
         ]);
     }
 
@@ -244,7 +241,7 @@ class QuizController extends Controller
 
         $quiz = $player->quiz;
 
-        if ($quiz->quiz_players()->first()->id == $player->id) {
+        if ($quiz->quizPlayers()->first()->id == $player->id) {
             return response()->json([
                 'qr_image' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png'
             ]);
@@ -266,17 +263,17 @@ class QuizController extends Controller
         $quiz = Quiz::find($request->get('quiz_id'));
 
         if ($quiz->players <= 2 ) {
-            event(new QuizEndedEvent($quiz->code, $quiz->quiz_players, $quiz->quiz_players()->first()));
+            event(new QuizEndedEvent($quiz->code, $quiz->quizPlayers(), $quiz->quizPlayers()->first()));
             $gameEnd = true;
         } else if($request->get('event_id') == 3) {
-            $quizAnswers = $quiz->quiz_answers_for_question($request->get('question_id'))->count();
+            $quizAnswers = $quiz->quizAnswersByQuestion($request->get('question_id'))->count();
 
             $left = $quiz->players - $quizAnswers;
-            $hostAnswer = $quiz->quiz_host_answers_for_question($request->get('question_id'), $request->get('player_id'))->count();
+            $hostAnswer = $quiz->quizHostAnswersByQuestion($request->get('question_id'), $request->get('player_id'))->count();
 
             if ($left == 1 && $hostAnswer == 0 ) {
-                $quizAnswers = $quiz->quiz_answers_for_question_for_vote($request->get('question_id'))
-                    ->with('quiz_player')
+                $quizAnswers = $quiz->quizAnswersByQuestionByVote($request->get('question_id'))
+                    ->with('quizPlayer')
                     ->get();
 
                 event(new VotingEvent($quiz->code, $quizAnswers));
@@ -292,16 +289,16 @@ class QuizController extends Controller
         } else if($request->get('event_id') == 5) {
             $hostVote = false;
 
-            $left = $quiz->players - $quiz->quiz_answers_for_question($request->get('question_id'))->sum('points');
+            $left = $quiz->players - $quiz->quizAnswersByQuestion($request->get('question_id'))->sum('points');
 
             $quizAnswers =  QuizAnswer::where('quiz_question_id', $request->get('question_id'))
                 ->where('quiz_id', $request->get('quiz_id'))->get();
 
-            $favorite = $quiz->quiz_answers_for_question($request->get('question_id'))
+            $favorite = $quiz->quizAnswersByQuestion($request->get('question_id'))
                 ->orderBy('points', 'DESC')
                 ->first();
 
-            $quizPlayer = $favorite->quiz_player;
+            $quizPlayer = $favorite->quizPlayer();
             $quizPlayer->points += 3;
             $roundsLeft = $quiz->quiz_rounds - $quiz->answered_question;
             $answerId = null;
@@ -319,9 +316,9 @@ class QuizController extends Controller
 
             if ($left == 1 && !$hostVote) {
                 if ($roundsLeft == 0) {
-                    event(new QuizEndedEvent($quiz->code, $quiz->quiz_players, $quiz->quiz_players()->first()));
+                    event(new QuizEndedEvent($quiz->code, $quiz->quizPlayers(), $quiz->quizPlayers()->first()));
                 } else {
-                    event(new PlayersPointsEvent($quiz->code, $quiz->quiz_players, $quizPlayer, $favorite->answer, $roundsLeft));
+                    event(new PlayersPointsEvent($quiz->code, $quiz->quizPlayers(), $quizPlayer, $favorite->answer, $roundsLeft));
                 }
             } else if($hostVote) {
                 $quizAnswer = QuizAnswer::find($answerId);
@@ -356,9 +353,9 @@ class QuizController extends Controller
                         $playerIds = null;
                         for ($i = 0, $iMax = count($voterIds); $i < $iMax; $i++) {
                             if ($voterIds[$i] != (string) $request->get('player_id')) {
-                                if($playerIds == null) {
+                                if ($playerIds == null) {
                                     $playerIds = $voterIds[$i];
-                                }else if($playerIds != null) {
+                                } else if ($playerIds != null) {
                                     $playerIds .= ','.$voterIds[$i];
                                 }
                             }
@@ -366,7 +363,6 @@ class QuizController extends Controller
 
                         $quizAnswer->quiz_player_ids = $playerIds;
                         $quizAnswer->save();
-
                         break;
                     }
                 }
@@ -395,16 +391,16 @@ class QuizController extends Controller
         $quiz = Quiz::find($request->get('quiz_id'));
 
         if ($quiz->players <= 2 ) {
-            event(new QuizEndedEvent($quiz->code, $quiz->quiz_players, $quiz->quiz_players()->first()));
+            event(new QuizEndedEvent($quiz->code, $quiz->quizPlayers(), $quiz->quizPlayers()->first()));
             $gameEnd = true;
         } else if ($request->get('event_id') == 3) {
-            $quizAnswers = $quiz->quiz_answers_for_question($request->get('question_id'))->count();
+            $quizAnswers = $quiz->quizAnswersByQuestion($request->get('question_id'))->count();
             $left = $quiz->players - $quizAnswers;
 
-            $hostAnswer = $quiz->quiz_host_answers_for_question($request->get('question_id'), $request->get('player_id'))->count();
+            $hostAnswer = $quiz->quizHostAnswersByQuestion($request->get('question_id'), $request->get('player_id'))->count();
 
             if ($left == 1 && $hostAnswer == 0 ) {
-                event(new VotingEvent($quiz->code, $quiz->quiz_answers_for_question_for_vote($request->get('question_id'))->with('quiz_player')->get()));
+                event(new VotingEvent($quiz->code, $quiz->quizAnswersByQuestionByVote($request->get('question_id'))->with('quizPlayer')->get()));
             } else if ($hostAnswer == 1) {
                 QuizAnswer::where('quiz_question_id', $request->get('question_id'))
                     ->where('quiz_player_id', $request->get('player_id'))
@@ -415,16 +411,16 @@ class QuizController extends Controller
                 ->where('quiz_player_id', $request->get('player_id'))
                 ->delete();
         } else if ($request->get('event_id') == 5) {
-            $left = $quiz->players - $quiz->quiz_answers_for_question($request->get('question_id'))->sum('points');
+            $left = $quiz->players - $quiz->quizAnswersByQuestion($request->get('question_id'))->sum('points');
             $quizAnswers =  QuizAnswer::where('quiz_question_id', $request->get('question_id'))
                 ->where('quiz_id', $request->get('quiz_id'))->get();
 
             $hostVote = false;
 
-            $favorite = $quiz->quiz_answers_for_question($request->get('question_id'))
+            $favorite = $quiz->quizAnswersByQuestion($request->get('question_id'))
                 ->orderBy('points', 'DESC')->first();
 
-            $quizPlayer = $favorite->quiz_player;
+            $quizPlayer = $favorite->quizPlayer();
             $quizPlayer->points += 3;
             $roundsLeft = $quiz->quiz_rounds - $quiz->answered_question;
 
@@ -442,9 +438,9 @@ class QuizController extends Controller
 
             if ($left == 1 && !$hostVote) {
                 if ($roundsLeft == 0) {
-                    event(new QuizEndedEvent($quiz->code, $quiz->quiz_players, $quiz->quiz_players()->first()));
+                    event(new QuizEndedEvent($quiz->code, $quiz->quizPlayers(), $quiz->quizPlayers()->first()));
                 } else {
-                    event(new PlayersPointsEvent($quiz->code, $quiz->quiz_players, $quizPlayer, $favorite->answer, $roundsLeft));
+                    event(new PlayersPointsEvent($quiz->code, $quiz->quizPlayers(), $quizPlayer, $favorite->answer, $roundsLeft));
                 }
             } else if($hostVote) {
                 $quizAnswer = QuizAnswer::find($answerId);
@@ -468,11 +464,11 @@ class QuizController extends Controller
             $quizAnswers = QuizAnswer::where('quiz_question_id', $request->get('question_id'))
                 ->where('quiz_id', $request->get('quiz_id'))->get();
 
-            foreach ($quizAnswers as $index => $answers) {
+            foreach ($quizAnswers as $answers) {
                 if ($answers->quiz_player_ids != null) {
                     $voterIds = explode(' ', $answers->quiz_player_ids);
 
-                    if(in_array((string) $request->get('player_id'), $voterIds, true)){
+                    if (in_array((string) $request->get('player_id'), $voterIds, true)) {
                         $quizAnswer = QuizAnswer::find($answers->id);
                         $quizAnswer->points -= 1;
 
@@ -481,7 +477,7 @@ class QuizController extends Controller
                             if ($voterIds[$i] != (string) $request->get('player_id')) {
                                 if ($playerIds == null) {
                                     $playerIds = $voterIds[$i];
-                                } else if($playerIds != null) {
+                                } else if ($playerIds != null) {
                                     $playerIds .= ",".$voterIds[$i];
                                 }
                             }
