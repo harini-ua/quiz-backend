@@ -1,0 +1,18 @@
+before_script:
+  - echo "Before script"
+  - cd /var/www/devtestnet2/data/www/
+
+building:
+  stage: build
+#  when: manual
+  only:
+    - develop
+  script:
+    - NODE_VER=8
+    - rm -rf /var/www/devtestnet2/data/gitlab-ci/licor43back.devtestnet.com
+    - mkdir /var/www/devtestnet2/data/gitlab-ci/licor43back.devtestnet.com
+    - git clone git@gitlab.com:dreamdev-solutions/connecting-futures/licor43/admin-homequiz.git /var/www/devtestnet2/data/gitlab-ci/licor43back.devtestnet.com/
+#    - cd /var/www/devtestnet2/data/gitlab-ci/licor43back.devtestnet.com/
+    - rsync -e "ssh -i ~/.ssh/id_rsa-liqor" -zaP /var/www/devtestnet2/data/gitlab-ci/licor43back.devtestnet.com/ ubuntu@admin.homequiz.app:/var/www/html/
+    - ssh -i ~/.ssh/id_rsa-liqor ubuntu@admin.homequiz.app "cd /var/www/html/ && /usr/bin/composer install && /usr/bin/php artisan migrate"
+    - ssh -i ~/.ssh/id_rsa-liqor ubuntu@admin.homequiz.app "source ~/.bash_profile && cd /var/www/html/ && npm i && npm run dev"
