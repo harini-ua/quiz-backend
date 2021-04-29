@@ -31,9 +31,9 @@ final class CategoryQuizQuestions extends Enum
             case self::MADE:
                 return 'What is it made of?';
             case self::FOOD_DRINKS:
-                return 'What is this food&drinks?';
+                return 'What would you pair it with?';
             case self::ENTERTAINMENT:
-                return 'What is this entertainment?';
+                return 'What would you do with?';
             default:
                 return self::getKey($value);
         }
