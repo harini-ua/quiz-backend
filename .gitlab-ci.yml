@@ -4,7 +4,7 @@ before_script:
 
 building:
   stage: build
-#  when: manual
+  when: manual
   only:
     - develop
   script:
