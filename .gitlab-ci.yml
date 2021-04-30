@@ -4,7 +4,7 @@ before_script:
 
 building:
   stage: build
-  when: manual
+#  when: manual
   only:
     - develop
   script:
@@ -14,5 +14,5 @@ building:
     - git clone git@gitlab.com:dreamdev-solutions/connecting-futures/licor43/admin-homequiz.git /var/www/devtestnet2/data/gitlab-ci/licor43back.devtestnet.com/
 #    - cd /var/www/devtestnet2/data/gitlab-ci/licor43back.devtestnet.com/
     - rsync -e "ssh -i ~/.ssh/id_rsa-liqor" -zaP /var/www/devtestnet2/data/gitlab-ci/licor43back.devtestnet.com/ ubuntu@admin.homequiz.app:/var/www/html/
-    - ssh -i ~/.ssh/id_rsa-liqor ubuntu@admin.homequiz.app "cd /var/www/html/ && /usr/bin/php artisan down && /usr/bin/composer install --optimize-autoloader && /usr/bin/php artisan migrate && /usr/bin/php artisan db:seed && /usr/bin/php artisan optimize:clear && /usr/bin/php artisan up"
+    - ssh -i ~/.ssh/id_rsa-liqor ubuntu@admin.homequiz.app "cd /var/www/html/ && /usr/bin/php artisan down && /usr/bin/composer install --optimize-autoloader && /usr/bin/php artisan migrate  && /usr/bin/php artisan optimize:clear && /usr/bin/php artisan up"
     - ssh -i ~/.ssh/id_rsa-liqor ubuntu@admin.homequiz.app "source ~/.bash_profile && cd /var/www/html/ && npm i && npm run dev"
