@@ -202,7 +202,7 @@ class QuizController extends Controller
         $quizAnswer->save();
         $quiz = $quizAnswer->quiz;
 
-        $quizQuestionId = $quizAnswer->quiz_question->id;
+        $quizQuestionId = $quizAnswer->quizQuestion->id;
         $quizAnswers = $quiz->quizAnswersByQuestion($quizQuestionId);
 
         if ($quiz->players == $quizAnswers->sum('points')) {
