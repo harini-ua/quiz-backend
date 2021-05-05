@@ -26,7 +26,7 @@ class DrinksAndFoodsController extends Controller
     public function drinks(Request $request)
     {
         Log::debug('/drinks before');
-        Log::debug((string) $request->all());
+        Log::debug($request->all());
 
         $matchDrinks = Food::find($request->get('food_id'))->drinks()
             ->get(['drinks.id', 'name', 'description', 'complexity_number', 'ingredients_number', 'minutes', 'image']);
@@ -118,7 +118,7 @@ class DrinksAndFoodsController extends Controller
     public function steps(Request $request)
     {
         Log::debug('/API/steps');
-        Log::debug((string) $request->all());
+        Log::debug($request->all());
 
         $foodSteps = Food::find($request->get('food_id'))->food_steps;
         $drinkSteps = Drink::find($request->get('drink_id'))->drink_steps;

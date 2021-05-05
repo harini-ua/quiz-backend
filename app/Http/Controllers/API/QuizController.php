@@ -58,7 +58,7 @@ class QuizController extends Controller
     {
         $quiz = Quiz::where('code', $request->get('code'))->with('user')->first();
 
-        Log::warning((string) $request->all());
+        Log::warning($request->all());
 
         $quizLanguage = $quiz->user->language;
 
