@@ -13,12 +13,26 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('ighaec0zuuK4eiMumee4Wah5'),
-            'is_admin' => 1,
-            'created_at' => \Carbon\Carbon::now()
-        ]);
+        $email = 'admin@example.com';
+        if (! DB::table('users')->whereEmail($email)->first()) {
+            DB::table('users')->insert([
+                'name' => 'Admin',
+                'email' => $email,
+                'password' => Hash::make('ighaec0zuuK4eiMumee4Wah5'),
+                'is_admin' => 1,
+                'created_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        $email = 'user@example.com';
+        if (! DB::table('users')->whereEmail($email)->first()) {
+            DB::table('users')->insert([
+                'name' => 'User',
+                'email' => $email,
+                'password' => Hash::make('kWD8jbbw'),
+                'is_admin' => 0,
+                'created_at' => \Carbon\Carbon::now()
+            ]);
+        }
     }
 }

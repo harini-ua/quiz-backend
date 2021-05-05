@@ -12,12 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call(UsersTableSeeder::class);
-
-        DB::table('failed_jobs')->whereNull('uuid')->cursor()->each(function ($job) {
-            DB::table('failed_jobs')
-                ->where('id', $job->id)
-                ->update(['uuid' => (string) Illuminate\Support\Str::uuid()]);
-        });
+        $this->call(UsersTableSeeder::class);
     }
 }

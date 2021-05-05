@@ -21,14 +21,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'CORS'], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', [AuthenticationController::class, 'login'])->name('login');
-        Route::post('register', [AuthenticationController::class, 'register']);
         Route::group(['middleware' => 'auth:api'], function() {
-            Route::get('logout', [AuthenticationController::class, 'logout']);
             Route::get('user', [AuthenticationController::class, 'user']);
         });
-        // FACEBOOK LOGIN
-        Route::post('login/facebook', [AuthenticationController::class, 'login_facebook'])
-            ->name('login-fb');
     });
 
     Route::group(['middleware' => 'auth:api'], function() {
