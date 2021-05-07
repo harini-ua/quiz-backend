@@ -207,12 +207,10 @@ class QuizController extends Controller
 
         if ($quiz->players == $quiz->quizAnswersByQuestion($quizQuestionId)->sum('points')) {
             $favorite = $quiz->quizAnswersByQuestion($quizQuestionId)
-                ->orderBy('points', 'DESC')->first();
+                ->with('quizPlayer')->orderBy('points', 'DESC')->first();
 
-            /** @var QuizPlayer $quizPlayer */
-            $quizPlayer = $favorite->quizPlayer();
-            $quizPlayer->points += 3;
-            $quizPlayer->save();
+            $quizPlayer = $favorite->quizPlayer;
+            $quizPlayer->increment('points', 3);
 
             ++$quiz->answered_question;
             $quiz->save();
@@ -298,11 +296,11 @@ class QuizController extends Controller
                 ->where('quiz_id', $request->get('quiz_id'))->get();
 
             $favorite = $quiz->quizAnswersByQuestion($request->get('question_id'))
-                ->orderBy('points', 'DESC')
-                ->first();
+                ->with('quizPlayer')->orderBy('points', 'DESC')->first();
 
-            $quizPlayer = $favorite->quizPlayer();
-            $quizPlayer->points += 3;
+            $quizPlayer = $favorite->quizPlayer;
+            $quizPlayer->increment('points', 3);
+
             $roundsLeft = $quiz->quiz_rounds - $quiz->answered_question;
             $answerId = null;
 
@@ -421,10 +419,11 @@ class QuizController extends Controller
             $hostVote = false;
 
             $favorite = $quiz->quizAnswersByQuestion($request->get('question_id'))
-                ->orderBy('points', 'DESC')->first();
+                ->with('quizPlayer')->orderBy('points', 'DESC')->first();
 
-            $quizPlayer = $favorite->quizPlayer();
-            $quizPlayer->points += 3;
+            $quizPlayer = $favorite->quizPlayer;
+            $quizPlayer->increment('points', 3);
+
             $roundsLeft = $quiz->quiz_rounds - $quiz->answered_question;
 
             $answerId = null;
