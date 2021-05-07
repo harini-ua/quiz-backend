@@ -170,7 +170,7 @@ class QuizController extends Controller
         }
 
         return response()->json([
-            'left' => $quiz->players - $quizAnswers
+            'left' => $quiz->players - $quizAnswers->count()
         ]);
     }
 
@@ -186,6 +186,7 @@ class QuizController extends Controller
         if ($request->get('answer_id') == -1 || $request->get('answer_id') == null) {
             $quizPlayer = QuizPlayer::find($request->get('player_id'));
             $quizAnswer = QuizAnswer::where('quiz_id', $quizPlayer->quiz_id)
+                ->with('quizQuestion')
                 ->orderBy('updated_at', 'DESC')->first();
         } else {
             $quizAnswer = QuizAnswer::find($request->get('answer_id'));
