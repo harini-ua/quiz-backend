@@ -204,10 +204,12 @@ class QuizController extends Controller
         $quiz = $quizAnswer->quiz;
 
         $quizQuestionId = $quizAnswer->quizQuestion->id;
-        $quizAnswers = $quiz->quizAnswersByQuestion($quizQuestionId);
 
-        if ($quiz->players == $quizAnswers->sum('points')) {
-            $favorite = $quizAnswers->orderBy('points', 'DESC')->first();
+        if ($quiz->players == $quiz->quizAnswersByQuestion($quizQuestionId)->sum('points')) {
+            $favorite = $quiz->quizAnswersByQuestion($quizQuestionId)
+                ->orderBy('points', 'DESC')->first();
+
+            /** @var QuizPlayer $quizPlayer */
             $quizPlayer = $favorite->quizPlayer();
             $quizPlayer->points += 3;
             $quizPlayer->save();
