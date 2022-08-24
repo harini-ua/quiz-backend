@@ -41,7 +41,7 @@
                                     @if ($user->password === 'fb-login')
                                         <p class="card-text">Facebook User</p>
                                     @else
-                                        <p class="card-text">Licor43 User</p>
+                                        <p class="card-text">Default User</p>
                                     @endif
 
                                     @if ($user->is_admin)

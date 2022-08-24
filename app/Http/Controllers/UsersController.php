@@ -79,10 +79,10 @@ class UsersController extends Controller
 
         foreach ($users as $user)
         {
-            if($user->password === 'fb-login') {
+            $user->type = "Default User";
+
+            if ($user->password === 'fb-login') {
                 $user->type = "Facebook User";
-            } else {
-                $user->type = "Licor43 User";
             }
         }
 

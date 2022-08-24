@@ -31,9 +31,9 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '2809198462450733',
-        'client_secret' => '2ce899cb582d0597148f5beb3ce90a01',
-        'redirect' => 'https://licor43.homequiz.app/auth/facebook/callback',
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('FACEBOOK_CALLBACK'),
     ],
 
 ];
